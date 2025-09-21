@@ -3,4 +3,5 @@
     <File Path="_commands.md" />
     <File Path="_icon.png" />
   </Folder>
+  <Project Path="Mi5hmasH.AppInfo/Mi5hmasH.AppInfo.csproj" />
 </Solution>

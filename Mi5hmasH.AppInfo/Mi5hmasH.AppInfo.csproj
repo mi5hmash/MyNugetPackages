@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<Version>$(AssemblyVersion)</Version>
+		<Authors>Mi5hmasH</Authors>
+		<Company>$(Authors)</Company>
+		<Copyright>$(Authors) © $([System.DateTime]::UtcNow.Year)</Copyright>
+		<PackageProjectUrl>https://github.com/mi5hmash/MyNugetPackages</PackageProjectUrl>
+		<Description>Provides global access to application details such as the name, version, author, product title, description, copyright, and debug status.</Description>
+		<!-- NuGet Properties -->
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>$(AssemblyName)</Title>
+		<PackageIcon>_icon.png</PackageIcon>
+		<RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+		<PackageTags>mi5hmash;appinfo</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<!-- Source-only package -->
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<NoWarn>NU5128</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\_icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<!-- Source-only package -->
+	<ItemGroup>
+		<Compile Include="**\*.cs" Exclude="bin\**\*.*;obj\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>contentFiles\cs\$(TargetFramework)\</PackagePath>
+			<CopyToOutput>true</CopyToOutput>
+		</Compile>
+		<None Include="_build.props">
+			<Pack>true</Pack>
+			<PackagePath>buildTransitive\$(AssemblyName).props</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>

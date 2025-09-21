@@ -1,0 +1,18 @@
+﻿<Project>
+	<PropertyGroup>
+		<MyPackageId>Mi5hmasH.AppInfo</MyPackageId>
+		<IsVisible>false</IsVisible>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Content Update="@(Content)">
+			<Visible Condition="'%(NuGetItemType)' == 'Content' and '%(NuGetPackageId)' == '$(MyPackageId)'">$(IsVisible)</Visible>
+		</Content>
+		<None Update="@(None)">
+			<Visible Condition="'%(NuGetItemType)' == 'None' and '%(NuGetPackageId)' == '$(MyPackageId)'">$(IsVisible)</Visible>
+		</None>
+		<Compile Update="@(Compile)">
+			<Visible Condition="'%(NuGetItemType)' == 'Compile' and '%(NuGetPackageId)' == '$(MyPackageId)'">$(IsVisible)</Visible>
+		</Compile>
+	</ItemGroup>
+</Project>

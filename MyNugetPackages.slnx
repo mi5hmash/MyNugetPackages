@@ -4,6 +4,7 @@
     <File Path="_icon.png" />
   </Folder>
   <Project Path="Mi5hmasH.AppInfo/Mi5hmasH.AppInfo.csproj" />
+  <Project Path="Mi5hmasH.GameLaunchers/Mi5hmasH.GameLaunchers.csproj" />
   <Project Path="Mi5hmasH.Logger/Mi5hmasH.Logger.csproj" />
   <Project Path="QualityControl.xUnit/QualityControl.xUnit.csproj" Id="7cda08ca-f51c-4b4a-9cd4-9c9d8a4b9732" />
 </Solution>

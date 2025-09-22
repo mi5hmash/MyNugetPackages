@@ -37,6 +37,7 @@
 		<ProjectReference Include="..\Mi5hmasH.Encoders\Mi5hmasH.Encoders.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.GameLaunchers\Mi5hmasH.GameLaunchers.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Logger\Mi5hmasH.Logger.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.Utilities\Mi5hmasH.Utilities.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -29,9 +29,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Mi5hmasH.AppInfo\Mi5hmasH.AppInfo.csproj" />
-		<ProjectReference Include="..\Mi5hmasH.Logger\Mi5hmasH.Logger.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.AppInfo\Mi5hmasH.AppInfo.csproj">
+			<Aliases>AppInfoAlias</Aliases>
+		</ProjectReference>
+		<ProjectReference Include="..\Mi5hmasH.AppSettings\Mi5hmasH.AppSettings.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.GameLaunchers\Mi5hmasH.GameLaunchers.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.Logger\Mi5hmasH.Logger.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

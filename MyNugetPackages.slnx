@@ -6,6 +6,7 @@
   <Project Path="Mi5hmasH.AppInfo/Mi5hmasH.AppInfo.csproj" />
   <Project Path="Mi5hmasH.AppSettings/Mi5hmasH.AppSettings.csproj" />
   <Project Path="Mi5hmasH.Compressors/Mi5hmasH.Compressors.csproj" />
+  <Project Path="Mi5hmasH.ConsoleHelper/Mi5hmasH.ConsoleHelper.csproj" />
   <Project Path="Mi5hmasH.Encoders/Mi5hmasH.Encoders.csproj" />
   <Project Path="Mi5hmasH.GameLaunchers/Mi5hmasH.GameLaunchers.csproj" />
   <Project Path="Mi5hmasH.Logger/Mi5hmasH.Logger.csproj" />

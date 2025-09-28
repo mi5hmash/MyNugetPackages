@@ -11,5 +11,6 @@
   <Project Path="Mi5hmasH.GameLaunchers/Mi5hmasH.GameLaunchers.csproj" />
   <Project Path="Mi5hmasH.Logger/Mi5hmasH.Logger.csproj" />
   <Project Path="Mi5hmasH.Utilities/Mi5hmasH.Utilities.csproj" />
+  <Project Path="Mi5hmasH.WpfHelper/Mi5hmasH.WpfHelper.csproj" Id="6105f041-83df-4387-82b4-2b1085a1863b" />
   <Project Path="QualityControl.xUnit/QualityControl.xUnit.csproj" Id="7cda08ca-f51c-4b4a-9cd4-9c9d8a4b9732" />
 </Solution>

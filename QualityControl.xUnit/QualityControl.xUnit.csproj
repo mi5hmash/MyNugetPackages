@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net10.0-windows</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<NeutralLanguage>en-US</NeutralLanguage>
@@ -34,10 +34,12 @@
 		</ProjectReference>
 		<ProjectReference Include="..\Mi5hmasH.AppSettings\Mi5hmasH.AppSettings.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Compressors\Mi5hmasH.Compressors.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.ConsoleHelper\Mi5hmasH.ConsoleHelper.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Encoders\Mi5hmasH.Encoders.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.GameLaunchers\Mi5hmasH.GameLaunchers.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Logger\Mi5hmasH.Logger.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Utilities\Mi5hmasH.Utilities.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.WpfHelper\Mi5hmasH.WpfHelper.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

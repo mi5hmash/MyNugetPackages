@@ -30,4 +30,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<Compile Include="..\Mi5hmasH.Utilities\Encryption\AesCrypto.cs" Link="Encryption\AesCrypto.cs" />
+	</ItemGroup>
+	
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Mi5hmasH.GameLaunchers.Helpers;
+namespace Mi5hmasH.Utilities.Helpers;
 
 public static class UrlHelpers
 {

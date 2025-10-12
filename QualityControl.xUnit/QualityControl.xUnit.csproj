@@ -19,12 +19,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.0.4" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-		<PackageReference Include="xunit.v3" Version="3.1.0" />
+		<PackageReference Include="xunit.v3" Version="3.2.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
@@ -38,7 +37,9 @@
 		<ProjectReference Include="..\Mi5hmasH.Encoders\Mi5hmasH.Encoders.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.GameLaunchers\Mi5hmasH.GameLaunchers.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Logger\Mi5hmasH.Logger.csproj" />
-		<ProjectReference Include="..\Mi5hmasH.Utilities\Mi5hmasH.Utilities.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.Utilities\Mi5hmasH.Utilities.csproj">
+			<Aliases>UtilitiesAlias</Aliases>
+		</ProjectReference>
 		<ProjectReference Include="..\Mi5hmasH.WpfHelper\Mi5hmasH.WpfHelper.csproj" />
 	</ItemGroup>
 

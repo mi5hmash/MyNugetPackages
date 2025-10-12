@@ -35,4 +35,10 @@
 		<Compile Include="..\Mi5hmasH.AppInfo\MyAppInfo.cs" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Compile Include="..\Mi5hmasH.Utilities\Converters\Base64ToImageConverter.cs" Link="Converters\Base64ToImageConverter.cs" />
+		<Compile Include="..\Mi5hmasH.Utilities\Converters\FileNameWithoutExtensionConverter.cs" Link="Converters\FileNameWithoutExtensionConverter.cs" />
+		<Compile Include="..\Mi5hmasH.Utilities\Converters\InverseBooleanConverter.cs" Link="Converters\InverseBooleanConverter.cs" />
+	</ItemGroup>
+
 </Project>

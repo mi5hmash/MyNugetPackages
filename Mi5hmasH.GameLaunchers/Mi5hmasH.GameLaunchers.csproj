@@ -30,4 +30,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<Compile Include="..\Mi5hmasH.Utilities\Helpers\UrlHelpers.cs" Link="Helpers\UrlHelpers.cs" />
+	</ItemGroup>
+
 </Project>

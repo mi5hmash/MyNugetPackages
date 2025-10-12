@@ -1,4 +1,5 @@
-﻿using Mi5hmasH.Utilities;
+﻿extern alias UtilitiesAlias;
+using UtilitiesAlias::Mi5hmasH.Utilities.Helpers;
 
 namespace QualityControl.xUnit;
 

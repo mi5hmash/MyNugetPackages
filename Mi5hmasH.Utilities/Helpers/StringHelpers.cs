@@ -1,4 +1,4 @@
-﻿namespace Mi5hmasH.Utilities;
+﻿namespace Mi5hmasH.Utilities.Helpers;
 
 public static class StringHelpers
 {

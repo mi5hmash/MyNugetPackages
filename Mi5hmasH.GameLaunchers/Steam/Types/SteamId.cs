@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Mi5hmasH.GameLaunchers.Helpers;
+using Mi5hmasH.Utilities.Helpers;
 using static System.Globalization.NumberStyles;
 
 namespace Mi5hmasH.GameLaunchers.Steam.Types;

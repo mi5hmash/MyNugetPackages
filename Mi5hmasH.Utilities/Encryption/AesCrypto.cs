@@ -1,19 +1,19 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Mi5hmasH.AppSettings.Encryption;
+namespace Mi5hmasH.Utilities;
 
 public class AesCrypto
 {
-    private byte[] _key = null!;
-
     private const byte SignatureLength = 16;
     private const byte IvLength = 16;
 
+    private byte[] _key = [];
     /// <summary>
-    /// The encryption key.
+    /// The encryption key as base64 string.
     /// </summary>
     public string Key
     {
@@ -143,7 +143,7 @@ public class AesCrypto
     }
 
     /// <summary>
-    /// Decrypts the specified string.
+    /// Decrypts the specified base64 string.
     /// </summary>
     /// <param name="text"></param>
     /// <returns></returns>

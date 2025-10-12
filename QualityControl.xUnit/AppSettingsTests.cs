@@ -1,8 +1,7 @@
-﻿extern alias AppInfoAlias;
-using Mi5hmasH.AppSettings;
+﻿using Mi5hmasH.AppSettings;
 using Mi5hmasH.AppSettings.Flavors;
 using System.Diagnostics.CodeAnalysis;
-using Mi5hmasH.AppSettings.Encryption;
+using AesCrypto = Mi5hmasH.Utilities.AesCrypto;
 
 namespace QualityControl.xUnit;
 

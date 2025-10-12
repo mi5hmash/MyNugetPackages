@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
-using Mi5hmasH.Logger.Converters;
 using System.Diagnostics.CodeAnalysis;
+using Mi5hmasH.Utilities.Converters;
 
 namespace Mi5hmasH.Logger.Models;
 

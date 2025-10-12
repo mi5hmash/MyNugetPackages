@@ -75,8 +75,9 @@ public sealed class AppSettingsTests : IDisposable
     {
         // Arrange
         var myAppSettings = new MyAppSettings();
-        var appSettingsManager = new AppSettingsManager<MyAppSettings, Json>(myAppSettings, AppInfoAlias.Mi5hmasH.AppInfo.MyAppInfo.RootPath);
-        if (doesEncrypt) appSettingsManager.SetEncryptor(new AesCrypto(EncryptionKeyBase64));
+        var appSettingsManager = new AppSettingsManager<MyAppSettings, Json>();
+        if (doesEncrypt) appSettingsManager.SetEncryptor(EncryptionKeyBase64);
+        appSettingsManager.Load(myAppSettings);
 
         // Act
         appSettingsManager.Save();
@@ -93,8 +94,9 @@ public sealed class AppSettingsTests : IDisposable
     {
         // Arrange
         var myAppSettings = new MyAppSettings();
-        var appSettingsManager = new AppSettingsManager<MyAppSettings, Xml>(myAppSettings, AppInfoAlias.Mi5hmasH.AppInfo.MyAppInfo.RootPath);
-        if (doesEncrypt) appSettingsManager.SetEncryptor(new AesCrypto(EncryptionKeyBase64));
+        var appSettingsManager = new AppSettingsManager<MyAppSettings, Xml>();
+        if (doesEncrypt) appSettingsManager.SetEncryptor(EncryptionKeyBase64);
+        appSettingsManager.Load(myAppSettings);
 
         // Act
         appSettingsManager.Save();

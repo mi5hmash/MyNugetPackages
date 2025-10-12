@@ -8,9 +8,7 @@ namespace Mi5hmasH.AppSettings;
 /// </summary>
 /// <typeparam name="T1">The type representing the application settings configuration.</typeparam>
 /// <typeparam name="T2">The type representing the settings flavor, which must implement <see cref="IAppSettingsFlavor"/> and have a parameterless constructor.</typeparam>
-/// <param name="settings">The settings configuration for the current instance.</param>
-/// <param name="directory">The directory path where setting file is stored.</param>
-public class AppSettingsManager<T1, T2>(T1 settings, string directory) where T1 : new() where T2 : IAppSettingsFlavor, new()
+public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettingsFlavor, new()
 {
     /// <summary>
     /// The default file name used for application settings.
@@ -25,13 +23,35 @@ public class AppSettingsManager<T1, T2>(T1 settings, string directory) where T1 
     /// <summary>
     /// Gets the directory path where setting file is stored.
     /// </summary>
-    public string FileDirectory { get; } = directory;
-    
+    public string FileDirectory { get; }
+
+    /// <summary>
+    /// The internal model that holds both metadata and application settings.
+    /// </summary>
+    private AppSettingsModel<T1> _appSettingsModel = new();
+
     /// <summary>
     /// Gets or sets the settings configuration for the current instance.
     /// </summary>
-    public T1 Settings { get; set; } = settings;
-    
+    public T1 Settings
+    {
+        get => _appSettingsModel.AppSettings;
+        set => _appSettingsModel.AppSettings = value;
+    }
+
+    /// <summary>
+    /// Gets the metadata information associated with the application settings.
+    /// </summary>
+    public AppSettingsMeta Meta
+    {
+        get => _appSettingsModel.Meta;
+        private init => _appSettingsModel.Meta = value;
+    }
+
+    /// <summary>
+    /// Gets the local metadata settings for the application.
+    /// </summary>
+    private AppSettingsMeta LocalMeta { get; }
 
     #region ENCRYPTION
 
@@ -41,11 +61,17 @@ public class AppSettingsManager<T1, T2>(T1 settings, string directory) where T1 
     private AesCrypto? Encryptor { get; set; }
 
     /// <summary>
-    /// Sets the encryptor to be used for encryption operations.
+    /// Determines whether encryption is currently enabled for this instance.
     /// </summary>
-    /// <param name="encryptor">An <see cref="AesCrypto"/> instance that provides the encryption functionality.</param>
-    public void SetEncryptor(AesCrypto encryptor)
-        => Encryptor = encryptor;
+    /// <returns><see langword="true"/> if encryption is enabled; otherwise, <see langword="false"/>.</returns>
+    public bool EncryptionEnabled() => Encryptor != null;
+
+    /// <summary>
+    /// Sets the encryptor.
+    /// </summary>
+    /// <param name="key">The encryption key to use for initializing the encryptor.</param>
+    public void SetEncryptor(string key)
+        => Encryptor = new AesCrypto(key);
 
     /// <summary>
     /// Represents the file extension used for encrypted files.
@@ -61,13 +87,65 @@ public class AppSettingsManager<T1, T2>(T1 settings, string directory) where T1 
 
     #endregion
 
-
     /// <summary>
     /// Constructs the full file path for the settings file.
     /// </summary>
     /// <returns></returns>
-    private string GetFilePath() 
+    private string GetFilePath()
         => Path.Combine(FileDirectory, $"{FileName}{_flavor.FileExtension}");
+
+    /// <summary>
+    /// Initializes a new instance of the AppSettingsManager class with optional metadata and a settings directory.
+    /// </summary>
+    /// <param name="localMeta">The local metadata to use for application settings. If null, a new AppSettingsMeta instance is created.</param>
+    /// <param name="directory">The path to the directory where settings files are stored. If null, the application's base directory is used.</param>
+    public AppSettingsManager(AppSettingsMeta? localMeta = null, string? directory = null)
+    {
+        LocalMeta = localMeta ?? new AppSettingsMeta();
+        Meta = new AppSettingsMeta();
+        Settings = new T1();
+        FileDirectory = directory ?? AppDomain.CurrentDomain.BaseDirectory;
+        Directory.CreateDirectory(FileDirectory);
+    }
+    
+    /// <summary>
+    /// Loads application settings from the settings file, optionally decrypting the file if an encryptor is configured.
+    /// </summary>
+    /// <exception cref="FileNotFoundException">Thrown if the settings file or encrypted settings file does not exist at the expected location.</exception>
+    /// <exception cref="Exception">Thrown if the settings file cannot be deserialized, or if the file's title does not match the application's expected title.</exception>
+    public void Load()
+    {
+        // try to load the data
+        string data;
+        const string errorMessage = "Settings file not found.";
+        if (Encryptor == null)
+        {
+            if (!File.Exists(GetFilePath()))
+                throw new FileNotFoundException(errorMessage, GetFilePath());
+            data = File.ReadAllText(GetFilePath());
+        }
+        else
+        {
+            if (!File.Exists(GetFilePathEncrypted()))
+                throw new FileNotFoundException(errorMessage, GetFilePathEncrypted());
+            data = Encryptor.Decrypt(File.ReadAllText(GetFilePathEncrypted()));
+        }
+        var newSettings = _flavor.Deserialize<T1>(data) ?? throw new Exception("Failed to deserialize settings.");
+        if (LocalMeta.Title != newSettings.Meta.Title)
+            throw new Exception($"Settings file title '{newSettings.Meta.Title}' does not match application title '{LocalMeta.Title}'.");
+        _appSettingsModel = newSettings;
+    }
+
+    /// <summary>
+    /// Loads the specified settings into the current instance, updating metadata and configuration accordingly.
+    /// </summary>
+    /// <param name="settings">The settings object to apply.</param>
+    public void Load(T1 settings)
+    {
+        Meta.Title = LocalMeta.Title;
+        Meta.Version = LocalMeta.Title;
+        Settings = settings;
+    }
 
     /// <summary>
     /// Saves the current application settings to a file.
@@ -75,8 +153,7 @@ public class AppSettingsManager<T1, T2>(T1 settings, string directory) where T1 
     public void Save()
     {
         // prepare the data
-        var newSettings = new AppSettingsModel<T1?>(Settings);
-        var data = _flavor.Serialize(newSettings);
+        var data = _flavor.Serialize(_appSettingsModel);
         // save the data
         if (Encryptor == null) File.WriteAllText(GetFilePath(), data);
         else
@@ -84,23 +161,5 @@ public class AppSettingsManager<T1, T2>(T1 settings, string directory) where T1 
             var encryptedString = Encryptor.Encrypt(data);
             File.WriteAllText(GetFilePathEncrypted(), encryptedString);
         }
-    }
-
-    /// <summary>
-    /// Loads the application settings from a file, optionally decrypting the data if an encryptor is provided.
-    /// </summary>
-    /// <exception cref="FileNotFoundException">Thrown if the settings file cannot be found.</exception>
-    /// <exception cref="Exception">Thrown if the settings file cannot be deserialized.</exception>
-    public void Load()
-    {
-        // check if the file exists
-        if (!File.Exists(GetFilePath()) && !File.Exists(GetFilePathEncrypted()))
-            throw new FileNotFoundException("Settings file not found.", GetFilePath());
-        // try to load the data
-        var data = Encryptor == null 
-            ? File.ReadAllText(GetFilePath()) 
-            : Encryptor.Decrypt(File.ReadAllText(GetFilePathEncrypted()));
-        var newSettings = _flavor.Deserialize<T1>(data) ?? throw new Exception("Failed to deserialize settings.");
-        if (newSettings.AppSettings != null) Settings = newSettings.AppSettings;
     }
 }

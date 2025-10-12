@@ -9,6 +9,7 @@
   <Project Path="Mi5hmasH.ConsoleHelper/Mi5hmasH.ConsoleHelper.csproj" />
   <Project Path="Mi5hmasH.Encoders/Mi5hmasH.Encoders.csproj" />
   <Project Path="Mi5hmasH.GameLaunchers/Mi5hmasH.GameLaunchers.csproj" />
+  <Project Path="Mi5hmasH.GameProfile/Mi5hmasH.GameProfile.csproj" />
   <Project Path="Mi5hmasH.Logger/Mi5hmasH.Logger.csproj" />
   <Project Path="Mi5hmasH.Utilities/Mi5hmasH.Utilities.csproj" />
   <Project Path="Mi5hmasH.WpfHelper/Mi5hmasH.WpfHelper.csproj" Id="6105f041-83df-4387-82b4-2b1085a1863b" />

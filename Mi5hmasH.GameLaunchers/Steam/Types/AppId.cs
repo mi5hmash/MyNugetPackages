@@ -4,14 +4,12 @@ using Mi5hmasH.Utilities.Helpers;
 namespace Mi5hmasH.GameLaunchers.Steam.Types;
 
 /// <summary>
-/// Represents a Steam application identifier, including its type, ID, title, and developer information.
+/// Represents a Steam Application Identifier, including its type, ID, title, and developer information.
 /// </summary>
-public class AppId
+public class AppId(uint id, AppId.AppTypeEnum type = AppId.AppTypeEnum.Unknown, string? title = null, string? developer = null) : IEquatable<AppId>
 {
-    private byte _type;
-
     /// <summary>
-    /// All known app types.
+    /// All known App types.
     /// </summary>
     public enum AppTypeEnum
     {
@@ -24,39 +22,27 @@ public class AppId
     }
 
     /// <summary>
-    /// The type of app.
+    /// The type of App.
     /// </summary>
-    public AppTypeEnum Type
-    {
-        get => (AppTypeEnum)_type;
-        set => _type = (byte)value;
-    }
+    public AppTypeEnum Type { get; private set; } = type;
 
     /// <summary>
-    /// The app ID.
+    /// The App ID.
     /// </summary>
-    public uint Id { get; }
-    
-    /// <summary>
-    /// The title of the app.
-    /// </summary>
-    public string? Title { get; }
-    
-    /// <summary>
-    /// The developer of the app.
-    /// </summary>
-    public string? Developer { get; }
-
-    public AppId(uint id, AppTypeEnum type = AppTypeEnum.Unknown, string? title = null, string? developer = null)
-    {
-        Id = id;
-        Type = type;
-        Title = title;
-        Developer = developer;
-    }
+    public uint Id { get; private set; } = id;
 
     /// <summary>
-    /// Opens the Steam store page for this app in the default web browser.
+    /// The title of the App.
+    /// </summary>
+    public string? Title { get; private set; } = title;
+
+    /// <summary>
+    /// The developer of the App.
+    /// </summary>
+    public string? Developer { get; private set; } = developer;
+
+    /// <summary>
+    /// Opens the Steam store page for this App in the default web browser.
     /// </summary>
     public void OpenSteamAppStoreUrl()
     {
@@ -69,7 +55,7 @@ public class AppId
     }
 
     /// <summary>
-    /// Opens the Steam developer page for this app in the default web browser.
+    /// Opens the Steam developer page for this App in the default web browser.
     /// </summary>
     public void OpenSteamDeveloperUrl()
     {
@@ -80,24 +66,60 @@ public class AppId
             // ignored
         }
     }
-    
-    public bool Equals(AppId other)
+
+    /// <summary>
+    /// Copies the values of all properties from the specified <see cref="AppId"/> instance to the current instance.
+    /// </summary>
+    /// <param name="other">The <see cref="AppId"/> instance whose property values will be assigned to this instance.</param>
+    public void Set(AppId other)
     {
-        return Id == other.Id &&
-               _type == other._type &&
-               Title == other.Title &&
-               Developer == other.Developer;
+        Id = other.Id;
+        Type = other.Type;
+        Title = other.Title;
+        Developer = other.Developer;
     }
+
+    public bool Equals(AppId? other)
+    {
+        if (ReferenceEquals(this, other))
+            return true;
+        if (other is null)
+            return false;
+
+        var sc = StringComparer.Ordinal;
+        return Id == other.Id &&
+               Type == other.Type &&
+               sc.Equals(Title, other.Title) &&
+               sc.Equals(Developer, other.Developer);
+    }
+    
+    public int GetHashCodeStable()
+    {
+        var hc = new HashCode();
+        var sc = StringComparer.Ordinal;
+        // Add fields to the hash code computation
+        hc.Add(Id);
+        hc.Add(Type);
+        hc.Add(Title, sc);
+        hc.Add(Developer, sc);
+        return hc.ToHashCode();
+    }
+
+    // This is a workaround to avoid the default GetHashCode() implementation in objects where all fields are mutable.
+    private readonly Guid _uniqueId = Guid.NewGuid();
+    public override int GetHashCode()
+        => _uniqueId.GetHashCode();
 
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is AppId castedObj && Equals(castedObj);
 
-    public override int GetHashCode()
-        => HashCode.Combine(Id, Type, Title, Developer);
+    public static bool operator ==(AppId? left, AppId? right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+        return left.Equals(right);
+    }
 
-    public static bool operator ==(AppId left, AppId right)
-        => left.Equals(right);
-
-    public static bool operator !=(AppId left, AppId right)
+    public static bool operator !=(AppId? left, AppId? right)
         => !(left == right);
 }

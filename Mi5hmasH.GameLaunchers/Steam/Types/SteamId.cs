@@ -7,7 +7,7 @@ namespace Mi5hmasH.GameLaunchers.Steam.Types;
 /// <summary>
 /// A class representing a Steam ID.
 /// </summary>
-public class SteamId
+public class SteamId : IEquatable<SteamId>
 {
     private byte _accountType = 1;
     private uint _instance = 1;
@@ -361,9 +361,26 @@ public class SteamId
             // ignored
         }
     }
-    
-    public bool Equals(SteamId other)
+
+    /// <summary>
+    /// Copies the account information from the specified <see cref="SteamId"/> instance to the current instance.
+    /// </summary>
+    /// <param name="other">The <see cref="SteamId"/> instance whose account information will be copied.</param>
+    public void Set(SteamId other)
     {
+        AccountId = other.AccountId;
+        _accountType = other._accountType;
+        _instance = other._instance;
+        _universe = other._universe;
+    }
+
+    public bool Equals(SteamId? other)
+    {
+        if (ReferenceEquals(this, other))
+            return true;
+        if (other is null)
+            return false;
+        
         return AccountId == other.AccountId && 
                _accountType == other._accountType &&
                _instance == other._instance &&
@@ -381,9 +398,13 @@ public class SteamId
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is SteamId castedObj && Equals(castedObj);
 
-    public static bool operator ==(SteamId left, SteamId right)
-        => left.Equals(right);
+    public static bool operator ==(SteamId? left, SteamId? right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(SteamId left, SteamId right)
+    public static bool operator !=(SteamId? left, SteamId? right)
         => !(left == right);
 }

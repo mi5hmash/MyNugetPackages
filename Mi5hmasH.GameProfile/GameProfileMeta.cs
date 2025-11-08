@@ -6,7 +6,7 @@ namespace Mi5hmasH.GameProfile;
 /// <summary>
 /// The Meta section of the <see cref="IGameProfile"/> file.
 /// </summary>
-public class GameProfileMeta(string? gpType = null, Version? gpVersion = null) : INotifyPropertyChanged
+public class GameProfileMeta(string? gpType = null, Version? gpVersion = null) : IEquatable<GameProfileMeta>, INotifyPropertyChanged
 {
     /// <summary>
     /// Game Profile type.
@@ -47,14 +47,27 @@ public class GameProfileMeta(string? gpType = null, Version? gpVersion = null) :
         GpVersion = meta.GpVersion;
     }
     
-    public bool Equals(GameProfileMeta other)
+    public bool Equals(GameProfileMeta? other)
     {
-        return GpType == other.GpType &&
+        if (ReferenceEquals(this, other))
+            return true;
+        if (other is null)
+            return false;
+
+        var sc = StringComparer.Ordinal;
+        return sc.Equals(GpType, other.GpType) &&
                GpVersion == other.GpVersion;
     }
 
     public int GetHashCodeStable()
-        => HashCode.Combine(GpType, GpVersion);
+    {
+        var hc = new HashCode();
+        var sc = StringComparer.Ordinal;
+        // Add fields to the hash code computation
+        hc.Add(GpType, sc);
+        hc.Add(GpVersion);
+        return hc.ToHashCode();
+    }
 
     // This is a workaround to avoid the default GetHashCode() implementation in objects where all fields are mutable.
     private readonly Guid _uniqueId = Guid.NewGuid();
@@ -65,10 +78,14 @@ public class GameProfileMeta(string? gpType = null, Version? gpVersion = null) :
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is GameProfileMeta castedObj && Equals(castedObj);
 
-    public static bool operator ==(GameProfileMeta left, GameProfileMeta right)
-        => left.Equals(right);
+    public static bool operator ==(GameProfileMeta? left, GameProfileMeta? right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(GameProfileMeta left, GameProfileMeta right)
+    public static bool operator !=(GameProfileMeta? left, GameProfileMeta? right)
         => !(left == right);
 
     // MVVM support

@@ -1,5 +1,6 @@
-﻿using Mi5hmasH.AppSettings;
-using Mi5hmasH.AppSettings.Flavors;
+﻿extern alias AppSettingsAlias;
+using AppSettingsAlias::Mi5hmasH.AppSettings;
+using AppSettingsAlias::Mi5hmasH.AppSettings.Flavors;
 using System.Diagnostics.CodeAnalysis;
 using AesCrypto = Mi5hmasH.Utilities.AesCrypto;
 
@@ -7,7 +8,7 @@ namespace QualityControl.xUnit;
 
 #region TEST_MODELS
 
-public class MyAppSettings
+public class MyAppSettings : IEquatable<MyAppSettings>
 {
     public class InnerSectionModel
     {
@@ -19,17 +20,32 @@ public class MyAppSettings
     public InnerSectionModel InnerSection { get; set; } = new();
     public bool BoolTrue { get; set; } = true;
 
-    public bool Equals(MyAppSettings other)
+    public bool Equals(MyAppSettings? other)
     {
-        return String1 == other.String1 &&
+        if (ReferenceEquals(this, other))
+            return true;
+        if (other is null)
+            return false;
+
+        var sc = StringComparer.Ordinal;
+        return sc.Equals(String1, other.String1) &&
                BoolTrue == other.BoolTrue &&
                InnerSection.NumberPositive == other.InnerSection.NumberPositive &&
                InnerSection.NumberNegative == other.InnerSection.NumberNegative;
     }
 
     public int GetHashCodeStable()
-        => HashCode.Combine(String1, BoolTrue, InnerSection.NumberPositive, InnerSection.NumberNegative);
-
+    {
+        var hc = new HashCode();
+        var sc = StringComparer.Ordinal;
+        // Add fields to the hash code computation
+        hc.Add(String1, sc);
+        hc.Add(BoolTrue);
+        hc.Add(InnerSection.NumberPositive);
+        hc.Add(InnerSection.NumberNegative);
+        return hc.ToHashCode();
+    }
+    
     // This is a workaround to avoid the default GetHashCode() implementation in objects where all fields are mutable.
     private readonly Guid _uniqueId = Guid.NewGuid();
     public override int GetHashCode() 
@@ -38,10 +54,14 @@ public class MyAppSettings
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is MyAppSettings castedObj && Equals(castedObj);
 
-    public static bool operator ==(MyAppSettings left, MyAppSettings right)
-        => left.Equals(right);
+    public static bool operator ==(MyAppSettings? left, MyAppSettings? right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(MyAppSettings left, MyAppSettings right)
+    public static bool operator !=(MyAppSettings? left, MyAppSettings? right)
         => !(left == right);
 }
 

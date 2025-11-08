@@ -39,7 +39,7 @@ public static partial class ConsoleHelper
     /// <summary>
     /// Prints a goodbye message based on the time of day and includes the username.
     /// </summary>
-    /// /// <param name="breakLine"></param>
+    /// <param name="breakLine"></param>
     public static void SayGoodbye(string? breakLine = null)
     {
         var currentHour = DateTime.Now.Hour;
@@ -66,8 +66,8 @@ public static partial class ConsoleHelper
     /// <summary>
     /// Displays the countdown and closes the application after it reach 0.
     /// </summary>
-    /// <param name="countdown">A number of seconds</param>
-    /// <param name="msg"></param>
+    /// <param name="countdown">A number of seconds.</param>
+    /// <param name="msg">A message to display during the countdown.</param>
     public static void ExitCountdown(int countdown = 5, string msg = "Application will be closed in")
     {
         var cdLength = countdown.ToString().Length;

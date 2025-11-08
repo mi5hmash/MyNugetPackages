@@ -10,7 +10,7 @@ namespace Mi5hmasH.Logger.Models;
 /// <remarks>This class is used to encapsulate details about a single log event, such as its severity
 /// level, associated message, and optional grouping for categorization. It provides constructors for creating log
 /// entries with varying levels of detail  and supports equality comparison and stable hash code generation.</remarks>
-public class LogEntry
+public class LogEntry : IEquatable<LogEntry>
 {
     /// <summary>
     /// The timestamp of the log entry.
@@ -72,20 +72,61 @@ public class LogEntry
     public int GetSize()
         => 8 + sizeof(SimpleLogger.LogSeverity) + (Group?.Length ?? 0) + Message.Length;
 
+    /// <summary>
+    /// Copies the log level, group, and message from the specified <see cref="LogEntry"/> instance, optionally copying the timestamp.
+    /// </summary>
+    /// <param name="other">The <see cref="LogEntry"/> instance whose values are to be copied.</param>
+    /// <param name="copyTimestamp">Indicates whether to copy the timestamp from <paramref name="other"/>.</param>
+    public void Set(LogEntry other, bool copyTimestamp = true)
+    {
+        LogLevel = other.LogLevel;
+        Group = other.Group;
+        Message = other.Message;
+        if (copyTimestamp)
+            Timestamp = other.Timestamp;
+    }
+
+    public bool Equals(LogEntry? other)
+    {
+        if (ReferenceEquals(this, other))
+            return true;
+        if (other is null)
+            return false;
+
+        var sc = StringComparer.Ordinal;
+        return Timestamp == other.Timestamp &&
+               LogLevel == other.LogLevel &&
+               sc.Equals(Group, other.Group) &&
+               sc.Equals(Message, other.Message);
+    }
+
     public int GetHashCodeStable()
-        => HashCode.Combine(Timestamp, LogLevel, Group, Message);
+    {
+        var hc = new HashCode();
+        var sc = StringComparer.Ordinal;
+        // Add fields to the hash code computation
+        hc.Add(Timestamp);
+        hc.Add(LogLevel);
+        hc.Add(Group, sc);
+        hc.Add(Message, sc);
+        return hc.ToHashCode();
+    }
 
     // This is a workaround to avoid the default GetHashCode() implementation in objects where all fields are mutable.
     private readonly Guid _uniqueId = Guid.NewGuid();
     public override int GetHashCode()
         => _uniqueId.GetHashCode();
-
+    
     public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is LogEntry castedObj && Equals(castedObj);
 
-    public static bool operator ==(LogEntry left, LogEntry right)
-        => left.Equals(right);
+    public static bool operator ==(LogEntry? left, LogEntry? right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(LogEntry left, LogEntry right)
+    public static bool operator !=(LogEntry? left, LogEntry? right)
         => !(left == right);
 }

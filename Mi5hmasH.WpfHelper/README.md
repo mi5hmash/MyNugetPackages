@@ -1,4 +1,9 @@
-# USAGE
+# Disclaimer
+This NuGet package was created exclusively for use in my own open‑source projects published on my GitHub profile.  
+While it is publicly available, it is not intended to serve as a general‑purpose library, nor is it designed or documented for external production use.  
+Feel free to explore the code, but please keep in mind that its primary purpose is to support my personal project ecosystem.
+
+# Usage
 ## DropProperties
 ### In "MainWindow.xaml.cs" add region
 ```csharp
@@ -56,6 +61,8 @@ public void OnFileDrop(string operationType, StringCollection filePaths)
         <ResourceDictionary>
             <!--  Converters  -->
             <c:Base64ToImageConverter x:Key="Base64ToImageConverter" />
+            <c:FileNameWithoutExtensionConverter x:Key="FileNameWithoutExtensionConverter" />
+            <c:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
@@ -75,6 +82,7 @@ public void OnFileDrop(string operationType, StringCollection filePaths)
     </Application.Resources>
 </Application>
 ```
+
 ### Override the OnStartup method in "App.xaml.cs" like this:
 ```csharp
 protected override void OnStartup(StartupEventArgs e)
@@ -185,7 +193,7 @@ new ColorAccentModel(
     Color.FromRgb(0, 103, 112),
     Color.FromRgb(0, 52, 59));
 
-// Purple
+// Violet
 new ColorAccentModel(
     Color.FromRgb(177, 70, 194),
     Color.FromRgb(189, 91, 203),
@@ -194,6 +202,16 @@ new ColorAccentModel(
     Color.FromRgb(158, 58, 176),
     Color.FromRgb(111, 35, 130),
     Color.FromRgb(70, 13, 90));
+
+// Purple
+new ColorAccentModel(
+    Color.FromRgb(107, 105, 214),
+    Color.FromRgb(129, 125, 220),
+    Color.FromRgb(181, 173, 235),
+    Color.FromRgb(228, 216, 248),
+    Color.FromRgb(79, 77, 206),
+    Color.FromRgb(44, 43, 158),
+    Color.FromRgb(19, 19, 106));
 
 // Red
 new ColorAccentModel(
@@ -204,4 +222,16 @@ new ColorAccentModel(
     Color.FromRgb(210, 14, 30),
     Color.FromRgb(158, 9, 18),
     Color.FromRgb(111, 3, 6));
+```
+
+### Windows 10 Dark Theme Fix
+```csharp
+protected override void OnSourceInitialized(EventArgs e)
+{
+    base.OnSourceInitialized(e);
+    // WINDOWS_10_DARK_THEME_FIX
+    if (!DarkModeWin10Helper.IsWindows10GreaterThan1809()) return;
+    var hwnd = new WindowInteropHelper(this).Handle;
+    DarkModeWin10Helper.FixImmersiveDarkMode(hwnd);
+}
 ```

@@ -1,23 +1,29 @@
-﻿# Exception logging
-### Console or Windows application
+﻿# Disclaimer
+This NuGet package was created exclusively for use in my own open‑source projects published on my GitHub profile.  
+While it is publicly available, it is not intended to serve as a general‑purpose library, nor is it designed or documented for external production use.  
+Feel free to explore the code, but please keep in mind that its primary purpose is to support my personal project ecosystem.  
+  
+# Usage
+## Console or Windows application
 ```csharp
 static void Main(string[] args)
 {
-    // Initialize APP_INFO
-    var appInfo = new MyAppInfo("ExceptionTest");
     // Initialize LOGGER
     var logger = new SimpleLogger
     {
-        LoggedAppName = appInfo.Name,
-        LoggedAppVersion = new Version(MyAppInfo.Version)
+        LoggedAppName = "MyConsoleApp",
+        LoggedAppVersion = new Version("1.0.0.0")
     };
+    
+    // CONFIGURE LOG PROVIDERS
     // Configure ConsoleLogProvider
     var consoleLogProvider = new ConsoleLogProvider();
     logger.AddProvider(consoleLogProvider);
     // Configure FileLogProvider
-    var fileLogProvider = new FileLogProvider(MyAppInfo.RootPath, 2);
+    var fileLogProvider = new FileLogProvider(AppDomain.CurrentDomain.BaseDirectory, 2);
     fileLogProvider.CreateLogFile();
     logger.AddProvider(fileLogProvider);
+
     // Add event handler for unhandled exceptions
     AppDomain.CurrentDomain.UnhandledException += (_, e) =>
     {
@@ -34,7 +40,7 @@ static void Main(string[] args)
 }
 ```
 
-### ASP.NET Core app
+## ASP.NET Core app
 ```csharp
 public class ExceptionLoggingService : IHostedService
 {
@@ -53,4 +59,11 @@ public class ExceptionLoggingService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }
+```
+
+## Logging a message
+```csharp
+logger.LogInfo("Info message");
+// For immediate output, you can force the logger to flush any buffered messages
+logger.Flush();
 ```

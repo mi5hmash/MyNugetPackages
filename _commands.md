@@ -10,6 +10,7 @@ dotnet sln add $LibName
 ```
 dotnet build -c Release
 dotnet pack -c Release --output .\.NuGets\nupkgs
+
 ```
 
 ### NuGet Cache Folder

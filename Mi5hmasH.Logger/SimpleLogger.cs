@@ -1,6 +1,7 @@
 ﻿using Mi5hmasH.Logger.Models;
 using Mi5hmasH.Logger.Providers;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Mi5hmasH.Logger;
 
@@ -80,9 +81,9 @@ public class SimpleLogger
     #region OS_PLATFORM
     
     /// <summary>
-    /// Gets the OS platform.
+    /// Detects the current operating system platform and returns its name as a string.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A string representing the current operating system platform.</returns>
     private static string GetOsPlatform()
     {
         if (OperatingSystem.IsWindows()) return "Windows";
@@ -90,6 +91,13 @@ public class SimpleLogger
         if (OperatingSystem.IsFreeBSD()) return "FreeBSD";
         return OperatingSystem.IsMacOS() ? "MacOS" : "Unknown";
     }
+
+    /// <summary>
+    /// Retrieves a descriptive string that identifies the current operating system.
+    /// </summary>
+    /// <returns>A string containing the operating system description. The string is trimmed of leading and trailing whitespace.</returns>
+    private static string GetOsDescription()
+        => RuntimeInformation.OSDescription.Trim();
 
     #endregion
 
@@ -122,7 +130,7 @@ public class SimpleLogger
     /// </summary>
     /// <returns></returns>
     private LogEntry CreateLogHeader()
-        => new(LogSeverity.Info, $"Log created with SimpleLogger v{_version} by Mi5hmasH.\nLogged app: {LoggedAppName} v{LoggedAppVersion} | OSPlatform: {GetOsPlatform()}");
+        => new(LogSeverity.Info, $"Log created with SimpleLogger v{_version} by Mi5hmasH.\nLogged app: {LoggedAppName} v{LoggedAppVersion} | OS: {GetOsDescription()}");
 
     /// <summary>
     /// Logs the specified log entry to all configured log providers.

@@ -1,6 +1,6 @@
 ﻿using Mi5hmasH.Logger.Models;
 
-namespace Mi5hmasH.Logger.Providers;
+namespace Mi5hmasH.Logger.LogProvidersFactory.LogProviders;
 
 /// <summary>
 /// Provides a logging implementation that updates a status bar with log messages.
@@ -8,14 +8,14 @@ namespace Mi5hmasH.Logger.Providers;
 /// <param name="updateStatusBar"></param>
 public class StatusBarLogProvider(Action<string> updateStatusBar) : ILogProvider
 {
-    public void Log(LogEntry entry)
+    public void Log(ILogEntry entry)
     {
         updateStatusBar.Invoke(string.IsNullOrEmpty(entry.Group)
             ? $"{entry.Message}"
             : $"[{entry.Group}] {entry.Message}");
     }
 
-    public async Task LogAsync(LogEntry entry)
+    public async Task LogAsync(ILogEntry entry)
     {
         Log(entry);
         await Task.CompletedTask;

@@ -1,5 +1,6 @@
 ﻿using Mi5hmasH.Logger;
-using Mi5hmasH.Logger.Providers;
+using Mi5hmasH.Logger.Enums;
+using Mi5hmasH.Logger.LogProvidersFactory.LogProviders;
 
 namespace QualityControl.xUnit;
 
@@ -122,7 +123,7 @@ public sealed class LoggerTests : IDisposable
         {
             LoggedAppName = "SimpleLoggerApp",
             LoggedAppVersion = new Version(1, 2, 3, 4),
-            MinSeverityLevel = SimpleLogger.LogSeverity.Info
+            MinSeverityLevel = LogSeverityEnum.Info
         };
         // Configure FileLogProvider
         var fileLogProvider = new FileLogProvider(_logsPath, 1)

@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="result"></param>
 /// <param name="description"></param>
-public class BoolResult(bool result, string description = "")
+public class TaskResult(bool result, string description = "")
 {
     /// <summary>
     /// Gets or sets the result of the operation.

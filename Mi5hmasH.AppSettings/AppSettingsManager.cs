@@ -1,5 +1,4 @@
-﻿using Mi5hmasH.AppSettings.Flavors;
-using Mi5hmasH.Utilities;
+﻿using Mi5hmasH.AppSettings.FlavorsFactory;
 
 namespace Mi5hmasH.AppSettings;
 
@@ -58,7 +57,7 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
     /// <summary>
     /// Gets or sets the AES encryption utility used for cryptographic operations.
     /// </summary>
-    private AesCrypto? Encryptor { get; set; }
+    private AesCrypto.Crypto? Encryptor { get; set; }
 
     /// <summary>
     /// Determines whether encryption is currently enabled for this instance.
@@ -71,7 +70,7 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
     /// </summary>
     /// <param name="key">The encryption key to use for initializing the encryptor.</param>
     public void SetEncryptor(string key)
-        => Encryptor = new AesCrypto(key);
+        => Encryptor = new AesCrypto.Crypto(key);
 
     /// <summary>
     /// Represents the file extension used for encrypted files.

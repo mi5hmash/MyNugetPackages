@@ -1,11 +1,11 @@
-﻿namespace Mi5hmasH.Utilities.Helpers;
+﻿namespace Mi5hmasH.Progress;
 
 /// <summary>
 /// Provides a mechanism for reporting progress updates as text messages and integer values to external handlers.
 /// </summary>
 /// <param name="text">An optional progress handler that receives status text updates. If null, no text progress will be reported.</param>
 /// <param name="value">An optional progress handler that receives progress notifications as integer values. If null, progress updates are not reported externally.</param>
-public class ProgressReporter(IProgress<string>? text = null, IProgress<int>? value = null)
+public sealed class ProgressReporter(IProgress<string>? text = null, IProgress<int>? value = null)
 {
     /// <summary>
     /// Initializes a new instance of the ProgressReporter class with an optional text progress handler.
@@ -43,4 +43,15 @@ public class ProgressReporter(IProgress<string>? text = null, IProgress<int>? va
     /// <param name="progress"></param>
     public void Report(int progress)
         => value?.Report(progress);
+
+    /// <summary>
+    /// Reports completion by setting progress to 100.
+    /// </summary>
+    public void Complete() => Report(100);
+
+    /// <summary>
+    /// Reports completion with an optional message.
+    /// </summary>
+    /// <param name="message">The message to report upon completion.</param>
+    public void Complete(string message) => Report(message, 100);
 }

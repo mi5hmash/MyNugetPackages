@@ -1,11 +1,13 @@
 ﻿using Mi5hmasH.Logger.Models;
-using Mi5hmasH.Logger.Providers;
 using System.Reflection;
-using System.Runtime.InteropServices;
+using Mi5hmasH.Logger.Enums;
+using Mi5hmasH.Logger.LogProvidersFactory;
+using Mi5hmasH.Logger.LogProvidersFactory.LogProviders;
+using Mi5hmasH.Utilities.Helpers;
 
 namespace Mi5hmasH.Logger;
 
-public class SimpleLogger
+public class SimpleLogger : ISimpleLogger
 {
     /// <summary>
     /// SimpleLogger version.
@@ -78,48 +80,12 @@ public class SimpleLogger
     
     #endregion
     
-    #region OS_PLATFORM
-    
-    /// <summary>
-    /// Detects the current operating system platform and returns its name as a string.
-    /// </summary>
-    /// <returns>A string representing the current operating system platform.</returns>
-    private static string GetOsPlatform()
-    {
-        if (OperatingSystem.IsWindows()) return "Windows";
-        if (OperatingSystem.IsLinux()) return "Linux";
-        if (OperatingSystem.IsFreeBSD()) return "FreeBSD";
-        return OperatingSystem.IsMacOS() ? "MacOS" : "Unknown";
-    }
-
-    /// <summary>
-    /// Retrieves a descriptive string that identifies the current operating system.
-    /// </summary>
-    /// <returns>A string containing the operating system description. The string is trimmed of leading and trailing whitespace.</returns>
-    private static string GetOsDescription()
-        => RuntimeInformation.OSDescription.Trim();
-
-    #endregion
-
     #region SEVERITY_LEVEL
-
-    /// <summary>
-    /// Log severity enumerator.
-    /// </summary>
-    public enum LogSeverity
-    {
-        Trace,
-        Debug,
-        Info,
-        Warning,
-        Error,
-        Critical
-    }
     
     /// <summary>
     /// Minimum severity level of the messages to include in the log.
     /// </summary>
-    public LogSeverity MinSeverityLevel { get; set; } = LogSeverity.Trace;
+    public LogSeverityEnum MinSeverityLevel { get; set; } = LogSeverityEnum.Trace;
 
     #endregion
 
@@ -130,7 +96,7 @@ public class SimpleLogger
     /// </summary>
     /// <returns></returns>
     private LogEntry CreateLogHeader()
-        => new(LogSeverity.Info, $"Log created with SimpleLogger v{_version} by Mi5hmasH.\nLogged app: {LoggedAppName} v{LoggedAppVersion} | OS: {GetOsDescription()}");
+        => new(LogSeverityEnum.Info, $"Log created with SimpleLogger v{_version} by Mi5hmasH.\nLogged app: {LoggedAppName} v{LoggedAppVersion} | OS: {OsPlatform.GetOsDescription()}");
 
     /// <summary>
     /// Logs the specified log entry to all configured log providers.
@@ -138,7 +104,7 @@ public class SimpleLogger
     /// <param name="severity"></param>
     /// <param name="message"></param>
     /// <param name="group"></param>
-    private void Log(LogSeverity severity, string message, string? group = null)
+    private void Log(LogSeverityEnum severity, string message, string? group = null)
     {
         if ((int)severity < (int)MinSeverityLevel) return;
 
@@ -159,7 +125,7 @@ public class SimpleLogger
     /// <param name="message">The message to log.</param>
     /// <param name="group">An optional group identifier to associate with the log entry.</param>
     public void LogTrace(string message, string? group = null)
-        => Log(LogSeverity.Trace, message, group);
+        => Log(LogSeverityEnum.Trace, message, group);
 
     /// <summary>
     /// Logs a debug-level message, optionally associating it with a specific group.
@@ -167,7 +133,7 @@ public class SimpleLogger
     /// <param name="message">The message to log.</param>
     /// <param name="group">An optional group identifier to associate with the log entry.</param>
     public void LogDebug(string message, string? group = null)
-        => Log(LogSeverity.Debug, message, group);
+        => Log(LogSeverityEnum.Debug, message, group);
 
     /// <summary>
     /// Logs an info-level message, optionally associating it with a specific group.
@@ -175,7 +141,7 @@ public class SimpleLogger
     /// <param name="message">The message to log.</param>
     /// <param name="group">An optional group identifier to associate with the log entry.</param>
     public void LogInfo(string message, string? group = null)
-        => Log(LogSeverity.Info, message, group);
+        => Log(LogSeverityEnum.Info, message, group);
 
     /// <summary>
     /// Logs a warning-level message, optionally associating it with a specific group.
@@ -183,7 +149,7 @@ public class SimpleLogger
     /// <param name="message">The message to log.</param>
     /// <param name="group">An optional group identifier to associate with the log entry.</param>
     public void LogWarning(string message, string? group = null)
-        => Log(LogSeverity.Warning, message, group);
+        => Log(LogSeverityEnum.Warning, message, group);
 
     /// <summary>
     /// Logs an error-level message, optionally associating it with a specific group.
@@ -191,7 +157,7 @@ public class SimpleLogger
     /// <param name="message">The message to log.</param>
     /// <param name="group">An optional group identifier to associate with the log entry.</param>
     public void LogError(string message, string? group = null)
-        => Log(LogSeverity.Error, message, group);
+        => Log(LogSeverityEnum.Error, message, group);
 
     /// <summary>
     /// Logs a critical-level message, optionally associating it with a specific group.
@@ -199,7 +165,7 @@ public class SimpleLogger
     /// <param name="message">The message to log.</param>
     /// <param name="group">An optional group identifier to associate with the log entry.</param>
     public void LogCritical(string message, string? group = null)
-        => Log(LogSeverity.Critical, message, group);
+        => Log(LogSeverityEnum.Critical, message, group);
 
     /// <summary>
     /// Flushes all log providers, ensuring that any buffered log entries are written to their respective outputs.

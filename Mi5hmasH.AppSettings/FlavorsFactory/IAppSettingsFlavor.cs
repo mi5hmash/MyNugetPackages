@@ -1,4 +1,4 @@
-﻿namespace Mi5hmasH.AppSettings.Flavors;
+﻿namespace Mi5hmasH.AppSettings.FlavorsFactory;
 
 public interface IAppSettingsFlavor
 {

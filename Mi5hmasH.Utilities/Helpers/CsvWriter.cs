@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Reflection;
 
-namespace Mi5hmasH.Logger.Helpers;
+namespace Mi5hmasH.Utilities.Helpers;
 
 /// <summary>
 /// Provides functionality for writing objects and headers to a CSV (Comma-Separated Values) output using reflection over public instance properties. Supports configurable culture formatting and resource management.

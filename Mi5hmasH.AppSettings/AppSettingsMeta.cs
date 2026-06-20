@@ -5,7 +5,7 @@ namespace Mi5hmasH.AppSettings;
 /// <summary>
 /// The Meta section of the <see cref="AppSettingsModel{T}"/> file.
 /// </summary>
-public class AppSettingsMeta
+public class AppSettingsMeta : IAppSettingsMeta
 {
     public string Title { get; set; } = GetTitle();
     public string Version { get; set; } = Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "1.0.0.0";

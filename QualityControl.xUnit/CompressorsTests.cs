@@ -1,4 +1,5 @@
 ﻿using Mi5hmasH.Compressors;
+using Mi5hmasH.Compressors.Zip;
 using System.Text;
 
 namespace QualityControl.xUnit;

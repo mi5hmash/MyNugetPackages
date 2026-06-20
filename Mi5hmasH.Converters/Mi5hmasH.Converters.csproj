@@ -5,20 +5,20 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<AssemblyVersion>0.0.2.0</AssemblyVersion>
+		<AssemblyVersion>0.0.1.0</AssemblyVersion>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<Version>$(AssemblyVersion)</Version>
 		<Authors>Mi5hmasH</Authors>
 		<Company>$(Authors)</Company>
 		<Copyright>$(Authors) © $([System.DateTime]::UtcNow.Year)</Copyright>
 		<PackageProjectUrl>https://github.com/mi5hmash/MyNugetPackages</PackageProjectUrl>
-		<Description>Provides support for storing and reading application settings.</Description>
+		<Description>Provides converters for .NET applications.</Description>
 		<!-- NuGet Properties -->
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>$(AssemblyName)</Title>
 		<PackageIcon>_icon.png</PackageIcon>
 		<RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
-		<PackageTags>mi5hmash;appsettings</PackageTags>
+		<PackageTags>mi5hmash;converters</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -30,8 +30,4 @@
 		<None Include=".\README.md" Pack="True" PackagePath="" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Mi5hmasH.AesCrypto\Mi5hmasH.AesCrypto.csproj" />
-	</ItemGroup>
-	
 </Project>

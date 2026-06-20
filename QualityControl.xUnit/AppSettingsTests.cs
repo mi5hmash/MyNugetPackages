@@ -1,8 +1,7 @@
 ﻿extern alias AppSettingsAlias;
 using AppSettingsAlias::Mi5hmasH.AppSettings;
-using AppSettingsAlias::Mi5hmasH.AppSettings.Flavors;
 using System.Diagnostics.CodeAnalysis;
-using AesCrypto = Mi5hmasH.Utilities.AesCrypto;
+using AppSettingsAlias::Mi5hmasH.AppSettings.FlavorsFactory.Flavors;
 
 namespace QualityControl.xUnit;
 
@@ -132,7 +131,7 @@ public sealed class AppSettingsTests : IDisposable
     {
         // Arrange
         const string key = "PsJJ0bpcv3hOACfIjqPT1xWfIVGOUniTnOlJKtzKrjQ=";
-        var encryptor = new AesCrypto(key);
+        var encryptor = new Mi5hmasH.AesCrypto.Crypto(key);
 
         // Act
         var encryptedString = encryptor.Encrypt(text);
@@ -147,7 +146,7 @@ public sealed class AppSettingsTests : IDisposable
     public void Debug_GenerateKey_ResultShouldNotBeNull()
     {
         // Act
-        var result = AesCrypto.Debug_GenerateKey();
+        var result = Mi5hmasH.AesCrypto.Crypto.Debug_GenerateKey();
         _output.WriteLine($"Generated Key: {result}");
 
         // Assert

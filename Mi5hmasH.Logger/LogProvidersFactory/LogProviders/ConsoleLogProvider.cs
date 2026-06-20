@@ -1,6 +1,6 @@
 ﻿using Mi5hmasH.Logger.Models;
 
-namespace Mi5hmasH.Logger.Providers;
+namespace Mi5hmasH.Logger.LogProvidersFactory.LogProviders;
 
 /// <summary>
 /// Provides a logging implementation that writes log messages to the console.
@@ -11,14 +11,14 @@ public class ConsoleLogProvider : ILogProvider
     /// Logs a message with the specified log entry details.
     /// </summary>
     /// <param name="entry"></param>
-    public void Log(LogEntry entry)
+    public void Log(ILogEntry entry)
     {
         Console.WriteLine(string.IsNullOrEmpty(entry.Group)
             ? $"[{entry.LogLevel}] {entry.Timestamp}: {entry.Message}"
             : $"[{entry.LogLevel}] {entry.Timestamp}: [Group: {entry.Group}] {entry.Message}");
     }
 
-    public async Task LogAsync(LogEntry entry)
+    public async Task LogAsync(ILogEntry entry)
     {
         Log(entry);
         await Task.CompletedTask;

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Mi5hmasH.AppSettings.Flavors;
+namespace Mi5hmasH.AppSettings.FlavorsFactory.Flavors;
 
 public class Xml : IAppSettingsFlavor
 {

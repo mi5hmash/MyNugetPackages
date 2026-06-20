@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Mi5hmasH.Utilities.Converters;
+namespace Mi5hmasH.Converters;
 
 /// <summary>
 /// Provides conversion between <see cref="DateTime"/> objects and their string representations using a configurable

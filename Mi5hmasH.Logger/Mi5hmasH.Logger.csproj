@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<AssemblyVersion>3.0.1.0</AssemblyVersion>
+		<AssemblyVersion>3.0.2.0</AssemblyVersion>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
 		<Version>$(AssemblyVersion)</Version>
 		<Authors>Mi5hmasH</Authors>
@@ -31,7 +31,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="..\Mi5hmasH.Utilities\Converters\DateTimeFormatConverter.cs" Link="Converters\DateTimeFormatConverter.cs" />
+		<Compile Include="..\Mi5hmasH.Utilities\Helpers\OsPlatform.cs" Link="Helpers\OsPlatform.cs" />
+		<Compile Include="..\Mi5hmasH.Utilities\Helpers\CsvWriter.cs" Link="Helpers\CsvWriter.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Mi5hmasH.Converters\Mi5hmasH.Converters.csproj" />
 	</ItemGroup>
 
 </Project>

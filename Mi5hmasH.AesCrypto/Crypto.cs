@@ -1,12 +1,11 @@
 ﻿using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
+using Mi5hmasH.Compressors;
 
-namespace Mi5hmasH.Utilities;
+namespace Mi5hmasH.AesCrypto;
 
-public class AesCrypto
+public class Crypto
 {
     private const byte SignatureLength = 16;
     private const byte IvLength = 16;
@@ -31,11 +30,11 @@ public class AesCrypto
     public Encoding TextEncoding { get; set; } = Encoding.UTF8;
 
     /// <summary>
-    /// Creates a new instance of the AesCrypto class.
+    /// Creates a new instance of the Crypto class.
     /// </summary>
     /// <param name="key"></param>
     /// <param name="saltLength"></param>
-    public AesCrypto(string key, uint saltLength = 64)
+    public Crypto(string key, uint saltLength = 64)
     {
         Key = key;
         SaltLength = saltLength;
@@ -116,7 +115,7 @@ public class AesCrypto
         ms.Write(aes.IV); // Write IV to data stream
 
         // Compress only if beneficial
-        var compressedBytes = BrotliCompress(bytes);
+        var compressedBytes = bytes.BrotliCompress();
         var useCompressed = compressedBytes.Length < bytes.Length;
 
         using MemoryStream ms2 = new();
@@ -191,41 +190,9 @@ public class AesCrypto
         var decryptedData = decryptedContainer.AsSpan(1).ToArray();
 
         // Decompress if needed
-        return isDataCompressed ? BrotliDecompress(decryptedData) : decryptedData;
+        return isDataCompressed ? decryptedData.BrotliDecompress() : decryptedData;
     }
-
-    #region COMPRESSION
-
-    /// <summary>
-    /// Compresses <paramref name="bytes"/> with Brotli.
-    /// </summary>
-    /// <param name="bytes">The byte array to be compressed.</param>
-    /// <param name="compressionLevel">The level of compression to apply (default: Optimal).</param>
-    /// <returns>The compressed byte array.</returns>
-    private static byte[] BrotliCompress(byte[] bytes, CompressionLevel compressionLevel = CompressionLevel.Optimal)
-    {
-        using var mso = new MemoryStream();
-        using (var bs = new BrotliStream(mso, compressionLevel)) 
-            bs.Write(bytes, 0, bytes.Length);
-        return mso.ToArray();
-    }
-
-    /// <summary>
-    /// Decompresses <paramref name="bytes"/> with Brotli.
-    /// </summary>
-    /// <param name="bytes">The Brotli-compressed byte array to be decompressed.</param>
-    /// <returns>The decompressed byte array.</returns>
-    private static byte[] BrotliDecompress(byte[] bytes)
-    {
-        using var msi = new MemoryStream(bytes);
-        using var mso = new MemoryStream();
-        using (var bs = new BrotliStream(msi, CompressionMode.Decompress)) 
-            bs.CopyTo(mso);
-        return mso.ToArray();
-    }
-
-    #endregion
-
+    
 #if DEBUG
     /// <summary>
     /// Generates a random key for debugging purposes.

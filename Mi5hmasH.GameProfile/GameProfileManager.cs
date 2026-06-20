@@ -1,5 +1,4 @@
-﻿using Mi5hmasH.Utilities;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 
@@ -61,14 +60,14 @@ public class GameProfileManager<T>(string? directory = null) : INotifyPropertyCh
     /// <summary>
     /// Gets or sets the AES encryption utility used for cryptographic operations.
     /// </summary>
-    private AesCrypto? Encryptor { get; set; }
+    private AesCrypto.Crypto? Encryptor { get; set; }
 
     /// <summary>
     /// Sets the encryptor.
     /// </summary>
     /// <param name="key">The encryption key to use for initializing the encryptor.</param>
     public void SetEncryptor(string key)
-        => Encryptor = new AesCrypto(key);
+        => Encryptor = new AesCrypto.Crypto(key);
 
     /// <summary>
     /// Determines whether encryption is currently enabled for this instance.

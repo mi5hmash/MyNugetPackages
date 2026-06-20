@@ -28,7 +28,7 @@ static void Main(string[] args)
     AppDomain.CurrentDomain.UnhandledException += (_, e) =>
     {
         if (e.ExceptionObject is not Exception exception) return;
-        var logEntry = new LogEntry(SimpleLogger.LogSeverity.Critical, $"Unhandled Exception: {exception}");
+        var logEntry = new LogEntry(LogSeverityEnum.Critical, $"Unhandled Exception: {exception}");
         fileLogProvider.Log(logEntry);
         fileLogProvider.Flush();
     };
@@ -50,7 +50,7 @@ public class ExceptionLoggingService : IHostedService
         {
             if (e.ExceptionObject is Exception exception)
             {
-                var logEntry = new LogEntry(SimpleLogger.LogSeverity.Critical, $"Unhandled Exception: {exception}");
+                var logEntry = new LogEntry(LogSeverityEnum.Critical, $"Unhandled Exception: {exception}");
                 FileLogProviderInstance.Log(logEntry);
             }
         };

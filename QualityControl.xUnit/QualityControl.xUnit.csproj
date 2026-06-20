@@ -19,7 +19,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
 		<PackageReference Include="xunit.v3" Version="3.2.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
 			<PrivateAssets>all</PrivateAssets>
@@ -28,6 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Mi5hmasH.AesCrypto\Mi5hmasH.AesCrypto.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.AppInfo\Mi5hmasH.AppInfo.csproj">
 			<Aliases>AppInfoAlias</Aliases>
 		</ProjectReference>
@@ -36,6 +37,8 @@
 		</ProjectReference>
 		<ProjectReference Include="..\Mi5hmasH.Compressors\Mi5hmasH.Compressors.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.ConsoleHelper\Mi5hmasH.ConsoleHelper.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.Converters\Mi5hmasH.Converters.csproj" />
+		<ProjectReference Include="..\Mi5hmasH.ConvertersWpf\Mi5hmasH.ConvertersWpf.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.Encoders\Mi5hmasH.Encoders.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.GameLaunchers\Mi5hmasH.GameLaunchers.csproj" />
 		<ProjectReference Include="..\Mi5hmasH.GameProfile\Mi5hmasH.GameProfile.csproj" />

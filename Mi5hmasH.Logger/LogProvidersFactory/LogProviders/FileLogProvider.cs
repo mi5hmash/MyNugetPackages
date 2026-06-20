@@ -1,9 +1,9 @@
-﻿using Mi5hmasH.Logger.Models;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Globalization;
-using Mi5hmasH.Logger.Helpers;
+using Mi5hmasH.Logger.Models;
+using Mi5hmasH.Utilities.Helpers;
 
-namespace Mi5hmasH.Logger.Providers;
+namespace Mi5hmasH.Logger.LogProvidersFactory.LogProviders;
 
 /// <summary>
 /// Provides functionality for logging messages to files with support for log rotation and buffering.
@@ -15,7 +15,7 @@ public class FileLogProvider(string logsRootDirectory, int maxLogFiles = 3) : IL
     /// <summary>
     /// Represents a thread-safe queue for storing log entries.
     /// </summary>
-    private readonly ConcurrentQueue<LogEntry> _logQueue = new();
+    private readonly ConcurrentQueue<ILogEntry> _logQueue = new();
 
     /// <summary>
     /// A max number of log files that can be stored simultaneously.
@@ -70,7 +70,7 @@ public class FileLogProvider(string logsRootDirectory, int maxLogFiles = 3) : IL
     /// Enqueues a log entry into the log queue.
     /// </summary>
     /// <param name="entry">The log entry containing the log level, timestamp, and message to be logged.</param>
-    public void Log(LogEntry entry)
+    public void Log(ILogEntry entry)
     {
         // Enqueue the log entry to the queue
         _logQueue.Enqueue(entry);
@@ -88,7 +88,7 @@ public class FileLogProvider(string logsRootDirectory, int maxLogFiles = 3) : IL
     /// Asynchronously enqueues a log entry into the log queue.
     /// </summary>
     /// <param name="entry">The log entry containing the log level, timestamp, and message to be logged.</param>
-    public async Task LogAsync(LogEntry entry)
+    public async Task LogAsync(ILogEntry entry)
     {
         _logQueue.Enqueue(entry);
         _currentBufferSize += entry.GetSize();

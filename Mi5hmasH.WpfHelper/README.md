@@ -53,21 +53,6 @@ public void OnFileDrop(string operationType, StringCollection filePaths)
 }
 ```
 
-## Converters
-### In "App.xaml" add the following:
-```xml
-<Application xmlns:c="clr-namespace:Mi5hmasH.Utilities.Converters;assembly=Mi5hmasH.WpfHelper">
-    <Application.Resources>
-        <ResourceDictionary>
-            <!--  Converters  -->
-            <c:Base64ToImageConverter x:Key="Base64ToImageConverter" />
-            <c:FileNameWithoutExtensionConverter x:Key="FileNameWithoutExtensionConverter" />
-            <c:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        </ResourceDictionary>
-    </Application.Resources>
-</Application>
-```
-
 ## WpfThemeAccent
 ### In "App.xaml" add the following:
 ```xml

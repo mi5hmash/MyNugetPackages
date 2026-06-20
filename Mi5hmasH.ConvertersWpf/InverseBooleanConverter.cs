@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace Mi5hmasH.Utilities.Converters;
+namespace Mi5hmasH.ConvertersWpf;
 
 public class InverseBooleanConverter : IValueConverter
 {

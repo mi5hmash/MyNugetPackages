@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Mi5hmasH.Utilities.Converters;
+using Mi5hmasH.Converters;
+using Mi5hmasH.Logger.Enums;
 
 namespace Mi5hmasH.Logger.Models;
 
@@ -10,7 +11,7 @@ namespace Mi5hmasH.Logger.Models;
 /// <remarks>This class is used to encapsulate details about a single log event, such as its severity
 /// level, associated message, and optional grouping for categorization. It provides constructors for creating log
 /// entries with varying levels of detail  and supports equality comparison and stable hash code generation.</remarks>
-public class LogEntry : IEquatable<LogEntry>
+public class LogEntry : IEquatable<ILogEntry>, ILogEntry
 {
     /// <summary>
     /// The timestamp of the log entry.
@@ -22,7 +23,7 @@ public class LogEntry : IEquatable<LogEntry>
     /// <summary>
     /// The severity level for logging messages.
     /// </summary>
-    public SimpleLogger.LogSeverity LogLevel { get; set; }
+    public LogSeverityEnum LogLevel { get; set; }
 
     /// <summary>
     /// The name of the group associated with the entity.
@@ -39,7 +40,7 @@ public class LogEntry : IEquatable<LogEntry>
     /// </summary>
     /// <param name="logLevel">The severity level of the log entry.</param>
     /// <param name="message">The message associated with the log entry. Cannot be null.</param>
-    public LogEntry(SimpleLogger.LogSeverity logLevel, string message)
+    public LogEntry(LogSeverityEnum logLevel, string message)
     {
         LogLevel = logLevel;
         Message = message;
@@ -53,7 +54,7 @@ public class LogEntry : IEquatable<LogEntry>
     /// <param name="group">The group or category associated with the log entry. This value cannot be null or empty.</param>
     /// <param name="logLevel">The severity level of the log entry, indicating its importance or urgency.</param>
     /// <param name="message">The message content of the log entry. This value cannot be null or empty.</param>
-    public LogEntry(string group, SimpleLogger.LogSeverity logLevel, string message)
+    public LogEntry(string group, LogSeverityEnum logLevel, string message)
     {
         Group = group;
         LogLevel = logLevel;
@@ -70,14 +71,14 @@ public class LogEntry : IEquatable<LogEntry>
     /// </summary>
     /// <returns>The total size of the log entry in bytes.</returns>
     public int GetSize()
-        => 8 + sizeof(SimpleLogger.LogSeverity) + (Group?.Length ?? 0) + Message.Length;
+        => 8 + sizeof(LogSeverityEnum) + (Group?.Length ?? 0) + Message.Length;
 
     /// <summary>
     /// Copies the log level, group, and message from the specified <see cref="LogEntry"/> instance, optionally copying the timestamp.
     /// </summary>
     /// <param name="other">The <see cref="LogEntry"/> instance whose values are to be copied.</param>
     /// <param name="copyTimestamp">Indicates whether to copy the timestamp from <paramref name="other"/>.</param>
-    public void Set(LogEntry other, bool copyTimestamp = true)
+    public void Set(ILogEntry other, bool copyTimestamp = true)
     {
         LogLevel = other.LogLevel;
         Group = other.Group;
@@ -86,7 +87,7 @@ public class LogEntry : IEquatable<LogEntry>
             Timestamp = other.Timestamp;
     }
 
-    public bool Equals(LogEntry? other)
+    public bool Equals(ILogEntry? other)
     {
         if (ReferenceEquals(this, other))
             return true;

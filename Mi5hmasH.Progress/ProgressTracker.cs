@@ -12,7 +12,7 @@ public sealed class ProgressTracker(long total, long start = 0)
     /// <summary>
     /// Gets the total number of steps required to complete the operation.
     /// </summary>
-    public long Total { get; } = total;
+    public long Total { get; init; } = total;
 
     /// <summary>
     /// Atomically increments the current progress value by 1.
@@ -29,7 +29,7 @@ public sealed class ProgressTracker(long total, long start = 0)
     /// Gets the current progress percentage (0–100).
     /// </summary>
     public int Percentage
-        => (int)((double)Current / Total * 100);
+        => Total == 0 ? 0 : (int)((double)Current / Total * 100);
 
     /// <summary>
     /// Gets the progress percentage formatted as a string with a percent sign.

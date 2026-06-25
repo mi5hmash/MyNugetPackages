@@ -17,13 +17,20 @@ public sealed class EncodersTests : IDisposable
     {
         _output.WriteLine("CLEANUP");
     }
-    
+
+    public static IEnumerable<object[]> Base64EncodingTheories =>
+    [
+        ["Hello World!", "SGVsbG8gV29ybGQh"],
+        ["Zażółć gęślą jaźń!", "WmHFvMOzxYLEhyBnxJnFm2zEhSBqYcW6xYQh"]    
+    ];
+
     [Fact]
     public void Base64_EncodingAscii_ShouldReturnExpectedResult()
     {
         // Arrange
-        const string inputString = "Hello World!";
-        const string expected = "SGVsbG8gV29ybGQh";
+        var first = Base64EncodingTheories.First();
+        var inputString = (string)first[0];
+        var expected = (string)first[1];
         
         // Act
         var result = inputString.B64Encode(Encoding.ASCII);
@@ -36,8 +43,9 @@ public sealed class EncodersTests : IDisposable
     public void Base64_DecodingAscii_ShouldReturnExpectedResult()
     {
         // Arrange
-        const string inputString = "SGVsbG8gV29ybGQh";
-        const string expected = "Hello World!";
+        var first = Base64EncodingTheories.First();
+        var inputString = (string)first[1];
+        var expected = (string)first[0];
 
         // Act
         var result = inputString.B64Decode(Encoding.ASCII);
@@ -47,8 +55,7 @@ public sealed class EncodersTests : IDisposable
     }
 
     [Theory]
-    [InlineData("Hello World!", "SGVsbG8gV29ybGQh")]
-    [InlineData("Zażółć gęślą jaźń!", "WmHFvMOzxYLEhyBnxJnFm2zEhSBqYcW6xYQh")]
+    [MemberData(nameof(Base64EncodingTheories))]
     public void Base64_EncodingUtf8_ShouldReturnExpectedResult(string inputString, string expected)
     {
         // Act
@@ -59,9 +66,8 @@ public sealed class EncodersTests : IDisposable
     }
 
     [Theory]
-    [InlineData("SGVsbG8gV29ybGQh", "Hello World!")]
-    [InlineData("WmHFvMOzxYLEhyBnxJnFm2zEhSBqYcW6xYQh", "Zażółć gęślą jaźń!")]
-    public void Base64_DecodingUtf8_ShouldReturnExpectedResult(string inputString, string expected)
+    [MemberData(nameof(Base64EncodingTheories))]
+    public void Base64_DecodingUtf8_ShouldReturnExpectedResult(string expected, string inputString)
     {
         // Act
         var result = inputString.B64Decode(Encoding.UTF8);

@@ -60,7 +60,7 @@ public void OnFileDrop(string operationType, StringCollection filePaths)
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--  Load Fluent.xaml  -->
+                <!-- Load Fluent.xaml -->
                 <ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -158,16 +158,6 @@ new ColorAccentModel(
     Color.FromRgb(0, 62, 146),
     Color.FromRgb(0, 26, 104));
 
-// Blue
-new ColorAccentModel(
-    Color.FromRgb(0, 120, 212),
-    Color.FromRgb(0, 145, 248),
-    Color.FromRgb(76, 194, 255),
-    Color.FromRgb(153, 235, 255),
-    Color.FromRgb(0, 103, 192),
-    Color.FromRgb(0, 62, 146),
-    Color.FromRgb(0, 26, 104));
-
 // Neon Blue
 new ColorAccentModel(
     Color.FromRgb(0, 183, 195),
@@ -215,8 +205,6 @@ protected override void OnSourceInitialized(EventArgs e)
 {
     base.OnSourceInitialized(e);
     // WINDOWS_10_DARK_THEME_FIX
-    if (!DarkModeWin10Helper.IsWindows10GreaterThan1809()) return;
-    var hwnd = new WindowInteropHelper(this).Handle;
-    DarkModeWin10Helper.FixImmersiveDarkMode(hwnd);
+    this.FixImmersiveDarkMode();
 }
 ```

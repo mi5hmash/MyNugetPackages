@@ -1,7 +1,9 @@
 <Solution>
-  <Folder Name="/Elementy rozwiązania/">
+  <Folder Name="/Solution Elements/">
     <File Path="_commands.md" />
     <File Path="_icon.png" />
+    <File Path="README.md" />
+    <File Path="LICENSE" />
   </Folder>
   <Project Path="Mi5hmasH.AesCrypto/Mi5hmasH.AesCrypto.csproj" />
   <Project Path="Mi5hmasH.AppInfo/Mi5hmasH.AppInfo.csproj" />

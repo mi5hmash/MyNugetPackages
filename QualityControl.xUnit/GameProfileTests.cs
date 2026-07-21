@@ -1,5 +1,6 @@
 ﻿using Mi5hmasH.GameProfile;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace QualityControl.xUnit;
@@ -13,15 +14,16 @@ public class TestGameProfile : IEquatable<TestGameProfile>, INotifyPropertyChang
     {
         Other = 0,
         Steam = 1,
-        EpicGames = 2,
-        GOG = 3,
+        [Display(Name = "Epic Games Store")] Egs = 2,
+        [Display(Name = "GOG Galaxy")] Gog = 3,
         Origin = 4,
         Uplay = 5,
-        XboxOne = 100,
-        XboxSeriesX = 101,
-        PS4 = 150,
-        PS5 = 151,
-        NintendoSwitch = 200
+        [Display(Name = "Xbox One")] XboxOne = 100,
+        [Display(Name = "Xbox Series X")] XboxSeriesX = 101,
+        [Display(Name = "PlayStation 4")] Ps4 = 150,
+        [Display(Name = "PlayStation 5")] Ps5 = 151,
+        [Display(Name = "Nintendo Switch")] NintendoSwitch = 200,
+        [Display(Name = "Nintendo Switch 2")] NintendoSwitch2 = 201
     }
 
     /// <summary>

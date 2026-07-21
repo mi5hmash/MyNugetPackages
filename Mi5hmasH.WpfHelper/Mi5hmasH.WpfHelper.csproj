@@ -34,6 +34,9 @@
 
 	<ItemGroup>
 		<Compile Include="..\Mi5hmasH.AppInfo\MyAppInfo.cs" />
+		<Compile Include="..\Mi5hmasH.Utilities\Helpers\OsVersion.cs">
+			<Link>Helpers\OsVersion.cs</Link>
+		</Compile>
 	</ItemGroup>
 
 </Project>

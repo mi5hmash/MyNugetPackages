@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Mi5hmasH.WpfHelper;
+namespace Mi5hmasH.Utilities.Helpers;
 
-public static class OsVersionHelper
+public static class OsVersion
 {
     /// <summary>
     /// Determines whether the current operating system is Windows 10 with a build number greater than or equal to 17763

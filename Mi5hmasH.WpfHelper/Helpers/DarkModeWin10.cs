@@ -1,11 +1,12 @@
 ﻿using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using Mi5hmasH.Utilities.Helpers;
 using Microsoft.Win32;
 
-namespace Mi5hmasH.WpfHelper;
+namespace Mi5hmasH.WpfHelper.Helpers;
 
-public static partial class DarkModeWin10Helper
+public static partial class DarkModeWin10
 {
     private const int DwmwaUseImmersiveDarkMode = 20;
 
@@ -18,7 +19,7 @@ public static partial class DarkModeWin10Helper
     /// <param name="window">The WPF <see cref="Window"/> instance for which immersive dark mode should be applied.</param>
     public static void FixImmersiveDarkMode(this Window window)
     {
-        if (!OsVersionHelper.IsWindows10GreaterThan1809()) return;
+        if (!OsVersion.IsWindows10GreaterThan1809()) return;
         var useDark = IsDarkModeEnabled();
         var useDarkInt = useDark ? 1 : 0;
         // Fix Title Bar

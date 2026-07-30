@@ -14,6 +14,7 @@ Feel free to explore the code, but please keep in mind that its primary purpose 
             <c:Base64ToImageConverter x:Key="Base64ToImageConverter" />
             <c:FileNameWithoutExtensionConverter x:Key="FileNameWithoutExtensionConverter" />
             <c:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <c:KeyGestureToStringConverter x:Key="KeyGestureToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -4,6 +4,9 @@ using System.Windows.Media.Imaging;
 
 namespace Mi5hmasH.ConvertersWpf;
 
+/// <summary>
+/// A value converter that converts a Base64-encoded string to a BitmapImage and vice versa.
+/// </summary>
 public class Base64ToImageConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)

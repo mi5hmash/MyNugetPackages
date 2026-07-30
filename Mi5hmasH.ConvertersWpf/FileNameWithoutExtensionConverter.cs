@@ -4,6 +4,9 @@ using System.Windows.Data;
 
 namespace Mi5hmasH.ConvertersWpf;
 
+/// <summary>
+/// A value converter that extracts the file name without its extension from a given file path string.
+/// </summary>
 public class FileNameWithoutExtensionConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

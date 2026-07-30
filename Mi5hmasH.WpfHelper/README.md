@@ -70,10 +70,8 @@ public void OnFileDrop(string operationType, StringCollection filePaths)
 
 ### Override the OnStartup method in "App.xaml.cs" like this:
 ```csharp
-protected override void OnStartup(StartupEventArgs e)
+private static void SetThemeAccent()
 {
-    base.OnStartup(e);
-    // Set the theme accent
     var colorAccent = new ColorAccentModel(
         Color.FromRgb(155, 106, 63),
         Color.FromRgb(181, 128, 74),
@@ -83,6 +81,14 @@ protected override void OnStartup(StartupEventArgs e)
         Color.FromRgb(99, 53, 32),
         Color.FromRgb(62, 19, 11));
     WpfThemeAccent.SetThemeAccent(colorAccent);
+}
+
+protected override void OnStartup(StartupEventArgs e)
+{
+    base.OnStartup(e);
+    
+    // Set the theme accent
+    SetThemeAccent();
 }
 ```
 
@@ -207,4 +213,42 @@ protected override void OnSourceInitialized(EventArgs e)
     // WINDOWS_10_DARK_THEME_FIX
     this.FixImmersiveDarkMode();
 }
+```
+
+## SettingsListItem
+
+### ... with CheckBox
+```xml
+<UserControl xmlns:uc="clr-namespace:Mi5hmasH.WpfHelper.UserControls;assembly=Mi5hmasH.WpfHelper"
+             xmlns:c="clr-namespace:YourApp.Converters">
+    <!-- [...] -->
+    <UserControl.Resources>
+        <c:BoolToEnablementStateConverter x:Key="BoolToEnablementStateConverter" />
+    </UserControl.Resources>
+    <uc:SettingsListItem IconFont="{StaticResource IconFont}"
+                         Icon="{Binding GithubIcon}"
+                         Title="Enable Something"
+                         Caption="Enable or disable something">
+        <uc:SettingsListItem.SettingControl>
+            <CheckBox IsChecked="{Binding IsSomething}" FlowDirection="RightToLeft"
+                      Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToEnablementStateConverter}}" />
+        </uc:SettingsListItem.SettingControl>
+    </uc:SettingsListItem>
+</UserControl>
+```
+
+### ... with ComboBox
+```xml
+<UserControl xmlns:uc="clr-namespace:Mi5hmasH.WpfHelper.UserControls;assembly=Mi5hmasH.WpfHelper">
+    <!-- [...] -->
+    <uc:SettingsListItem IconFont="{StaticResource IconFont}"
+                     Icon="{Binding GithubIcon}"
+                     Title="Theme"
+                     Caption="Choose the theme">
+    <uc:SettingsListItem.SettingControl>
+        <ComboBox ItemsSource="{Binding AvailableModes}" 
+                  SelectedItem="{Binding SelectedMode}" />
+    </uc:SettingsListItem.SettingControl>
+</uc:SettingsListItem>
+</UserControl>
 ```

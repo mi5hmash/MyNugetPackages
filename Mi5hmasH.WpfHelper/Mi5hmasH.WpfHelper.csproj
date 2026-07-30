@@ -37,6 +37,18 @@
 		<Compile Include="..\Mi5hmasH.Utilities\Helpers\OsVersion.cs">
 			<Link>Helpers\OsVersion.cs</Link>
 		</Compile>
+		<Compile Include="..\Mi5hmasH.Utilities\Enums\LifetimeEnum.cs">
+			<Link>Enums\LifetimeEnum.cs</Link>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Enums\" />
 	</ItemGroup>
 
 </Project>

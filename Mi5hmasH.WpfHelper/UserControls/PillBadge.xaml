@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Mi5hmasH.WpfHelper.UserControls.PillBadge"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             x:Name="Root">
+    <Border 
+        d:BorderBrush="Black" 
+        d:BorderThickness="2"
+        CornerRadius="10"
+        Padding="8,0"
+        Background="{DynamicResource AccentFillColorDefaultBrush}"
+        ClipToBounds="True">
+        <TextBlock Style="{StaticResource CaptionTextBlockStyle}"
+                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+                   FontWeight="{Binding FontWeight, ElementName=Root}"
+                   Text="{Binding Text, ElementName=Root}" d:Text="Text" />
+    </Border>
+</UserControl>

@@ -18,8 +18,7 @@ public partial class SettingsListItem
         get => (FontFamily)GetValue(IconFontProperty);
         set => SetValue(IconFontProperty, value);
     }
-
-
+    
     // Icon
     public static readonly DependencyProperty IconProperty =
         DependencyProperty.Register(nameof(Icon), typeof(string), typeof(SettingsListItem));

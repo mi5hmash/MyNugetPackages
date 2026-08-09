@@ -33,6 +33,7 @@ public partial class NavigationService : ObservableObject, INavigationService
     private readonly IEnumerable<PageModel> _pages;
     private readonly Dictionary<Type, PageModel> _pagesMap = [];
     private readonly Dictionary<Type, List<ShortcutCommandModel>> _viewModelsCommands;
+    private readonly Assembly? _appAssembly;
 
     /// <summary>
     /// Gets or sets the current view model being displayed in the application.
@@ -71,7 +72,10 @@ public partial class NavigationService : ObservableObject, INavigationService
         {
             page.NavigateToCommand = new RelayCommand(() => NavigateTo(page.ViewModelType));
             _pagesMap.Add(page.ViewModelType, page);
+            if (_appAssembly == null) 
+                _appAssembly = page.ViewModelType.Assembly;
         }
+        _appAssembly ??= Assembly.GetExecutingAssembly();
 
         _viewModelsCommands = BuildInputBindingsDictionary();
     }
@@ -189,7 +193,7 @@ public partial class NavigationService : ObservableObject, INavigationService
     private Dictionary<Type, List<ShortcutCommandModel>> BuildInputBindingsDictionary()
     {
         var dictionary = new Dictionary<Type, List<ShortcutCommandModel>>();
-        var vmTypes = Assembly.GetExecutingAssembly()
+        var vmTypes = _appAssembly!
             .GetTypes()
             .Where(t => typeof(ViewModel).IsAssignableFrom(t) && !t.IsAbstract);
 

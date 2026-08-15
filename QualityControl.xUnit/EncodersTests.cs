@@ -17,20 +17,21 @@ public sealed class EncodersTests : IDisposable
     {
         _output.WriteLine("CLEANUP");
     }
-
-    public static IEnumerable<object[]> Base64EncodingTheories =>
-    [
-        ["Hello World!", "SGVsbG8gV29ybGQh"],
-        ["Zażółć gęślą jaźń!", "WmHFvMOzxYLEhyBnxJnFm2zEhSBqYcW6xYQh"]    
-    ];
+    
+    public static TheoryData<string, string> Base64EncodingTheories =>
+        new()
+        {
+            { "Hello World!", "SGVsbG8gV29ybGQh" },
+            { "Zażółć gęślą jaźń!", "WmHFvMOzxYLEhyBnxJnFm2zEhSBqYcW6xYQh" }
+        };
 
     [Fact]
     public void Base64_EncodingAscii_ShouldReturnExpectedResult()
     {
         // Arrange
         var first = Base64EncodingTheories.First();
-        var inputString = (string)first[0];
-        var expected = (string)first[1];
+        var inputString = first.Data.Item1;
+        var expected = first.Data.Item2;
         
         // Act
         var result = inputString.B64Encode(Encoding.ASCII);
@@ -44,8 +45,8 @@ public sealed class EncodersTests : IDisposable
     {
         // Arrange
         var first = Base64EncodingTheories.First();
-        var inputString = (string)first[1];
-        var expected = (string)first[0];
+        var inputString = first.Data.Item1;
+        var expected = first.Data.Item2;
 
         // Act
         var result = inputString.B64Decode(Encoding.ASCII);

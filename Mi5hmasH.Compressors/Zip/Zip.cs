@@ -51,9 +51,15 @@ public static class Zip
         }
     }
 
-    /// <param name="bytes">The bytes to process.</param>
+    /// <param name="bytes">A byte array to process.</param>
     extension(byte[] bytes)
     {
+        /// <summary>
+        /// Determines whether the underlying byte array represents data in the Zip compressed format.
+        /// </summary>
+        /// <returns><see langword="true"/> if the byte array begins with the Zip magic number; otherwise, <see langword="false"/>.</returns>
+        public bool IsZip() => bytes is [0x50, 0x4B, ..];
+        
         /// <summary>
         /// Decompresses a ZIP archive <paramref name="bytes"/> and extracts the contents of the specified <paramref name="entryName"/>.
         /// </summary>

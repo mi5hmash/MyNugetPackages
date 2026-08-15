@@ -7,7 +7,7 @@ namespace Mi5hmasH.Compressors;
 /// </summary>
 public static class GZip
 {
-    /// <param name="bytes">The data to compress as a byte array.</param>
+    /// <param name="bytes">A byte array to process.</param>
     extension(byte[] bytes)
     {
         /// <summary>

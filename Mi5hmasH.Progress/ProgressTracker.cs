@@ -17,8 +17,13 @@ public sealed class ProgressTracker(long total, long start = 0)
     /// <summary>
     /// Atomically increments the current progress value by 1.
     /// </summary>
-    /// <returns>The incremented value.</returns>
     public void Increment() => Interlocked.Increment(ref _current);
+    
+    /// <summary>
+    /// Atomically increments the current progress value by the specified amount.
+    /// </summary>
+    /// <param name="value">The amount to increment by.</param>
+    public void IncrementBy(int value) => Interlocked.Add(ref _current, value);
 
     /// <summary>
     /// Gets the current progress value in a thread‑safe manner.

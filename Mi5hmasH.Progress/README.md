@@ -22,6 +22,12 @@ var progressTracker = new ProgressTracker(10, 2);
 progressTracker.Increment();
 ```
 
+## Increment progress by
+```csharp
+// Increment progress by 10
+progressTracker.IncrementBy(10);
+```
+
 ## Error Counter
 ```csharp
 // Initialize error counter

@@ -147,6 +147,17 @@ public sealed class ProgressTests : IDisposable
         // Assert
         Assert.Equal(4, tracker.Current);
     }
+    
+    [Fact]
+    public void ProgressTracker_IncrementBy_IncreasesCurrentByOne()
+    {
+        // Arrange
+        var tracker = new ProgressTracker(10, 2);
+        // Act
+        tracker.IncrementBy(4);
+        // Assert
+        Assert.Equal(6, tracker.Current);
+    }
 
     [Fact]
     public void ProgressTracker_Percentage_ComputesCorrectly()

@@ -34,12 +34,8 @@
 
 	<ItemGroup>
 		<Compile Include="..\Mi5hmasH.AppInfo\MyAppInfo.cs" />
-		<Compile Include="..\Mi5hmasH.Utilities\Helpers\OsVersion.cs">
-			<Link>Helpers\OsVersion.cs</Link>
-		</Compile>
-		<Compile Include="..\Mi5hmasH.Utilities\Enums\LifetimeEnum.cs">
-			<Link>Enums\LifetimeEnum.cs</Link>
-		</Compile>
+		<Compile Include="..\Mi5hmasH.Utilities\Helpers\OsVersion.cs" Link="Helpers\OsVersion.cs" />
+		<Compile Include="..\Mi5hmasH.Utilities\Enums\LifetimeEnum.cs" Link="Enums\LifetimeEnum.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

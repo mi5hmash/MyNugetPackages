@@ -110,4 +110,48 @@ public class AesHelper
         for (var i = 1; i < paddingLength + 1; i++)
             data[^i] = paddingLength;
     }
+
+    /// <summary>
+    /// Calculates the number of zero padding bytes required to align the given data length to the next multiple of the AES block size (16 bytes).
+    /// </summary>
+    /// <param name="dataWithNoPaddingLength">The length of the data without any padding.</param>
+    /// <returns>The number of zero padding bytes needed to reach the next AES block boundary (16 bytes).</returns>
+    public static byte CalculateZerosPaddingLength(int dataWithNoPaddingLength)
+    {
+        var dataContainerLength = (dataWithNoPaddingLength + 15) & ~15;
+        return (byte)(dataContainerLength - dataWithNoPaddingLength);
+    }
+
+    /// <summary>
+    /// Calculates the number of zero padding bytes required to align the given data length to the next multiple of the AES block size (16 bytes).
+    /// </summary>
+    /// <param name="dataWithNoPadding">The span of bytes representing the data without any padding.</param>
+    /// <returns>The number of zero padding bytes needed to reach the next AES block boundary (16 bytes).</returns>
+    public static byte CalculateZerosPaddingLength(ReadOnlySpan<byte> dataWithNoPadding)
+        => CalculateZerosPaddingLength(dataWithNoPadding.Length);
+    
+    /// <summary>
+    /// Adds zero padding to the given data to align it to the next multiple of the AES block size (16 bytes).
+    /// </summary>
+    /// <param name="data">The span of bytes representing the data to pad.</param>
+    /// <returns>A new byte array containing the original data followed by the necessary zero padding.</returns>
+    public static byte[] AddZerosPadding(ReadOnlySpan<byte> data)
+    {
+        var padLen = CalculateZerosPaddingLength(data);
+        var newDataLength = data.Length + padLen;
+        var dataWithPadding = GC.AllocateUninitializedArray<byte>(newDataLength);
+        var dataWithPaddingAsSpan = dataWithPadding.AsSpan();
+        data.CopyTo(dataWithPaddingAsSpan);
+        AddZerosPaddingInPlace(dataWithPaddingAsSpan, padLen);
+        
+        return dataWithPadding;
+    }
+
+    /// <summary>
+    /// Adds zero padding to the end of the provided data in place, filling the last bytes with zeros to reach the next multiple of the AES block size (16 bytes).
+    /// </summary>
+    /// <param name="data">The span of bytes representing the data to pad.</param>
+    /// <param name="paddingLength">The number of zero padding bytes to add.</param>
+    public static void AddZerosPaddingInPlace(Span<byte> data, byte paddingLength) 
+        => data[^paddingLength..].Clear();
 }

@@ -156,7 +156,7 @@ public sealed class GameProfileTests : IDisposable
     private void LoadGameProfile()
     {
         // Load GameProfile
-        _gameProfileManager.SetEncryptor(EncKey);
+        _gameProfileManager.SetEncryptionKey(EncKey);
         const string gp =
             "RzzQYWP+LCjGv1lbklplByfjrO72dPhocU2U5zhkVMV4kYbaQnxUfsCqHEmlyZpBXDWUEHeBcrVTJbbrMaEqoa/x6biqfQgoE3U1lledi5+tGTuEByFpxTJfkstt8+A2G+rrGpw28fVhu4gtWKM/7AfXEoUHtFMVtppWnmkKhGnROuWQA8mtg81J2Fs6XwXpRzkO7Vwg5oF5E5G4RFTR2kvp6+sV9wrWsOdyRtZhAWTGQfZF6PFU/tx3aBPk2YLK0fUCFNlVsd5VIbPLVox3r7a4BWn8LRamuG5BnTPzShg=";
         _gameProfileManager.Load(gp, "profile");
@@ -177,7 +177,7 @@ public sealed class GameProfileTests : IDisposable
     public void Debug_CreateGameProfile_ResultShouldNotBeNull()
     {
         // Arrange
-        _gameProfileManager.SetEncryptor(EncKey);
+        _gameProfileManager.SetEncryptionKey(EncKey);
 
         // Act
         var gp = new TestGameProfile

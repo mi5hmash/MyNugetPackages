@@ -12,8 +12,8 @@ public sealed class LoggerTests : IDisposable
     {
         _output = output;
         _output.WriteLine("SETUP");
-        // Setup
-        RecreateLogsPath();
+        // Create a log folder for the tests for each test run
+        Directory.CreateDirectory(_logsPath);
     }
 
     public void Dispose()
@@ -25,19 +25,19 @@ public sealed class LoggerTests : IDisposable
 
     private readonly string _logsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "_logsTests");
     
-    private void RecreateLogsPath()
+    private static void RecreatePath(string path)
     {
-        try { Directory.Delete(_logsPath, true); }
+        try { Directory.Delete(path, true); }
         catch { /* ignored */ }
-        Directory.CreateDirectory(_logsPath);
+        Directory.CreateDirectory(path);
     }
 
     #endregion
     
     [Theory]
-    [InlineData(3, 1, 1, "_1")]
-    [InlineData(3, 0, 3, "_2")]
-    public void SimpleLogger_FileLimit_ShouldNotExceedTheLimit(int logFilesToCreate, int fileNumberLimit, int expectedFilesNumber, string suffix)
+    [InlineData(3, 1, 1, "FileLimit_1")]
+    [InlineData(3, 0, 3, "FileLimit_2")]
+    public async Task SimpleLogger_FileLimit_ShouldNotExceedTheLimit(int logFilesToCreate, int fileNumberLimit, int expectedFilesNumber, string logFileNamePrefix)
     {
         // ARRANGE
         // Create a SimpleLogger instance
@@ -46,20 +46,25 @@ public sealed class LoggerTests : IDisposable
             LoggedAppName = "SimpleLoggerApp",
             LoggedAppVersion = new Version(1, 2, 3, 4)
         };
+        // Create a log folder for this test
+        var currentTestLogFolderPath = Path.Combine(_logsPath, logFileNamePrefix);
+        RecreatePath(currentTestLogFolderPath);
         
         // ACT
         // Configure FileLogProvider
-        var fileLogProvider = new FileLogProvider(_logsPath, fileNumberLimit)
-        {
-            LogFileNamePrefix = $"SimpleLoggerFileLimit{suffix}"
-        };
+        var fileLogProvider = new FileLogProvider(currentTestLogFolderPath, fileNumberLimit);
 
         // Create log files up to the specified limit
-        for (var i = 0; i < logFilesToCreate; i++) 
+        for (var i = 0; i < logFilesToCreate; i++)
+        {
+            // Ensure a slight delay to avoid file name collisions
+            await Task.Delay(10, TestContext.Current.CancellationToken);
+            // Create a new log file
             fileLogProvider.CreateLogFile();
+        }
         
         logger.AddProvider(fileLogProvider);
-        logger.Flush();
+        await logger.FlushAsync();
 
         // Get the count of log files created
         var logFilesCount = fileLogProvider.GetLogFileList().Count;

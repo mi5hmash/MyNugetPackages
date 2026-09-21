@@ -76,7 +76,7 @@ var appSettingsManager = new AppSettingsManager<MyAppSettings, Json>();
 // (OPTIONAL) Set the encryption key if you want to encrypt the settings file. 
 // The string should be base64‑encoded 32‑byte (256‑bit) AES encryption key.
 private const string EncryptionKeyBase64 = "hLR2ymI3kEMLQ6WrghQ741axGb6xdyMDdRbqR8b4KN4=";
-appSettingsManager.SetEncryptor(EncryptionKeyBase64);
+appSettingsManager.SetEncryptionKey(EncryptionKeyBase64);
 // Load the settings with the default values.
 appSettingsManager.Load(myAppSettings);
 // Save the default values to the settings file. 

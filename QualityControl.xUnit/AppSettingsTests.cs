@@ -94,7 +94,7 @@ public sealed class AppSettingsTests : IDisposable
         // Arrange
         var myAppSettings = new MyAppSettings();
         var appSettingsManager = new AppSettingsManager<MyAppSettings, Json>();
-        if (doesEncrypt) appSettingsManager.SetEncryptor(EncryptionKeyBase64);
+        if (doesEncrypt) appSettingsManager.SetEncryptionKey(EncryptionKeyBase64);
         appSettingsManager.Load(myAppSettings);
 
         // Act
@@ -113,7 +113,7 @@ public sealed class AppSettingsTests : IDisposable
         // Arrange
         var myAppSettings = new MyAppSettings();
         var appSettingsManager = new AppSettingsManager<MyAppSettings, Xml>();
-        if (doesEncrypt) appSettingsManager.SetEncryptor(EncryptionKeyBase64);
+        if (doesEncrypt) appSettingsManager.SetEncryptionKey(EncryptionKeyBase64);
         appSettingsManager.Load(myAppSettings);
 
         // Act
@@ -131,11 +131,11 @@ public sealed class AppSettingsTests : IDisposable
     {
         // Arrange
         const string key = "PsJJ0bpcv3hOACfIjqPT1xWfIVGOUniTnOlJKtzKrjQ=";
-        var encryptor = new Mi5hmasH.AesCrypto.Crypto(key);
+        using var crypto = new Mi5hmasH.AesCrypto.Crypto(Convert.FromBase64String(key), true);
 
         // Act
-        var encryptedString = encryptor.Encrypt(text);
-        var decryptedString = encryptor.Decrypt(encryptedString);
+        var encryptedString = crypto.Encrypt(text);
+        var decryptedString = crypto.Decrypt(encryptedString);
 
         // Assert
         Assert.Equal(text, decryptedString);
@@ -146,7 +146,18 @@ public sealed class AppSettingsTests : IDisposable
     public void Debug_GenerateKey_ResultShouldNotBeNull()
     {
         // Act
-        var result = Mi5hmasH.AesCrypto.Crypto.Debug_GenerateKey();
+        var result = Mi5hmasH.AesCrypto.Helpers.CryptoHelper.Debug_GenerateKey();
+        _output.WriteLine($"Generated Key: {result}");
+
+        // Assert
+        Assert.NotNull(result);
+    }
+    
+    [Fact]
+    public void Debug_GenerateBase64Key_ResultShouldNotBeNull()
+    {
+        // Act
+        var result = Mi5hmasH.AesCrypto.Helpers.CryptoHelper.Debug_GenerateBase64Key();
         _output.WriteLine($"Generated Key: {result}");
 
         // Assert

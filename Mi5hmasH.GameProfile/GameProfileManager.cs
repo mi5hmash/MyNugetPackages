@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
+using Mi5hmasH.AesCrypto;
 
 namespace Mi5hmasH.GameProfile;
 
@@ -58,22 +59,27 @@ public class GameProfileManager<T>(string? directory = null) : INotifyPropertyCh
     #region ENCRYPTION
 
     /// <summary>
-    /// Gets or sets the AES encryption utility used for cryptographic operations.
+    /// The encryption key used for encrypting and decrypting settings data.
     /// </summary>
-    private AesCrypto.Crypto? Encryptor { get; set; }
+    private byte[]? _encryptionKey;
 
     /// <summary>
-    /// Sets the encryptor.
+    /// Sets the encryption key to be used for encrypting and decrypting settings data.
     /// </summary>
-    /// <param name="key">The encryption key to use for initializing the encryptor.</param>
-    public void SetEncryptor(string key)
-        => Encryptor = new AesCrypto.Crypto(key);
+    /// <param name="base64Key">A Base64-encoded string representing the encryption key.</param>
+    public void SetEncryptionKey(string base64Key) => _encryptionKey = Convert.FromBase64String(base64Key);
 
     /// <summary>
-    /// Determines whether encryption is currently enabled for this instance.
+    /// Sets the encryption key to be used for encrypting and decrypting settings data.
     /// </summary>
-    /// <returns><see langword="true"/> if encryption is enabled; otherwise, <see langword="false"/>.</returns>
-    public bool EncryptionEnabled() => Encryptor != null;
+    /// <param name="key">A span of bytes representing the encryption key.</param>
+    public void SetEncryptionKey(ReadOnlySpan<byte> key)
+    {
+        if (_encryptionKey == null || _encryptionKey.Length != key.Length)
+            _encryptionKey = GC.AllocateUninitializedArray<byte>(key.Length);
+
+        key.CopyTo(_encryptionKey);
+    }
 
     /// <summary>
     /// Represents the file extension used for encrypted files.
@@ -99,7 +105,7 @@ public class GameProfileManager<T>(string? directory = null) : INotifyPropertyCh
     /// <returns>A string containing the absolute path to the profile file, with either the encrypted or JSON file extension applied.</returns>
     public string GetFilePath()
     {
-        var extension = Encryptor != null ? EncryptedFileExtension : JsonFileExtension;
+        var extension = _encryptionKey != null ? EncryptedFileExtension : JsonFileExtension;
         return Path.Combine(GetDirectory(), $"{CurrentlyLoadedProfileName}{extension}");
     }
 
@@ -131,7 +137,11 @@ public class GameProfileManager<T>(string? directory = null) : INotifyPropertyCh
     {
         if (!File.Exists(filePath)) throw new FileNotFoundException("Game Profile file not found.", filePath);
         var data = File.ReadAllText(filePath);
-        if (Encryptor != null) data = Encryptor.Decrypt(data);
+        if (_encryptionKey != null)
+        {
+            using var crypto = new Crypto(_encryptionKey, true);
+            data = crypto.Decrypt(data);
+        }
         var newGp = JsonSerializer.Deserialize<T>(data, _jsonOptions) ?? throw new Exception("Failed to deserialize game profile.");
         ApplyLoadedProfile(newGp, Path.GetFileNameWithoutExtension(filePath), Path.GetDirectoryName(filePath));
     }
@@ -144,7 +154,11 @@ public class GameProfileManager<T>(string? directory = null) : INotifyPropertyCh
     /// <exception cref="Exception">Thrown if the provided data cannot be deserialized into a valid game profile.</exception>
     public void Load(string data, string profileName)
     {
-        if (Encryptor != null) data = Encryptor.Decrypt(data);
+        if (_encryptionKey != null)
+        {
+            using var crypto = new Crypto(_encryptionKey, true);
+            data = crypto.Decrypt(data);
+        }
         var newGp = JsonSerializer.Deserialize<T>(data, _jsonOptions) ?? throw new Exception("Failed to deserialize game profile.");
         ApplyLoadedProfile(newGp, profileName, null);
     }
@@ -167,15 +181,17 @@ public class GameProfileManager<T>(string? directory = null) : INotifyPropertyCh
     }
 
     /// <summary>
-    /// Prepares a serialized representation of the current game profile and outputs it as a string, optionally encrypting the result if an encryptor is available.
+    /// Prepares a serialized representation of the current game profile and outputs it as a string, optionally encrypting the result if an encryption key is available.
     /// </summary>
-    /// <param name="data">When this method returns, contains the prepared data as a JSON string. If an encryptor is set, the string will be encrypted; otherwise, it will be plain JSON.</param>
+    /// <param name="data">When this method returns, contains the prepared data as a JSON string. If an encryption key is set, the string will be encrypted; otherwise, it will be plain JSON.</param>
     public void PrepareData(out string data)
     {
         // prepare the data
         data = JsonSerializer.Serialize(GameProfile, _jsonOptions);
-        // save the data
-        if (Encryptor != null) data = Encryptor.Encrypt(data);
+        // encrypt the data if an encryption key is set
+        if (_encryptionKey == null) return;
+        using var crypto = new Crypto(_encryptionKey, false);
+        data = crypto.Encrypt(data);
     }
 
     /// <summary>

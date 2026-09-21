@@ -45,8 +45,8 @@ public sealed class EncodersTests : IDisposable
     {
         // Arrange
         var first = Base64EncodingTheories.First();
-        var inputString = first.Data.Item1;
-        var expected = first.Data.Item2;
+        var expected = first.Data.Item1;
+        var inputString = first.Data.Item2;
 
         // Act
         var result = inputString.B64Decode(Encoding.ASCII);

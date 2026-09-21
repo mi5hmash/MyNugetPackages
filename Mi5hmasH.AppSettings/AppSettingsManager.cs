@@ -1,4 +1,5 @@
-﻿using Mi5hmasH.AppSettings.FlavorsFactory;
+﻿using Mi5hmasH.AesCrypto;
+using Mi5hmasH.AppSettings.FlavorsFactory;
 
 namespace Mi5hmasH.AppSettings;
 
@@ -55,22 +56,27 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
     #region ENCRYPTION
 
     /// <summary>
-    /// Gets or sets the AES encryption utility used for cryptographic operations.
+    /// The encryption key used for encrypting and decrypting settings data.
     /// </summary>
-    private AesCrypto.Crypto? Encryptor { get; set; }
+    private byte[]? _encryptionKey;
 
     /// <summary>
-    /// Determines whether encryption is currently enabled for this instance.
+    /// Sets the encryption key to be used for encrypting and decrypting settings data.
     /// </summary>
-    /// <returns><see langword="true"/> if encryption is enabled; otherwise, <see langword="false"/>.</returns>
-    public bool EncryptionEnabled() => Encryptor != null;
+    /// <param name="base64Key">A Base64-encoded string representing the encryption key.</param>
+    public void SetEncryptionKey(string base64Key) => _encryptionKey = Convert.FromBase64String(base64Key);
 
     /// <summary>
-    /// Sets the encryptor.
+    /// Sets the encryption key to be used for encrypting and decrypting settings data.
     /// </summary>
-    /// <param name="key">The encryption key to use for initializing the encryptor.</param>
-    public void SetEncryptor(string key)
-        => Encryptor = new AesCrypto.Crypto(key);
+    /// <param name="key">A span of bytes representing the encryption key.</param>
+    public void SetEncryptionKey(ReadOnlySpan<byte> key)
+    {
+        if (_encryptionKey == null || _encryptionKey.Length != key.Length)
+            _encryptionKey = GC.AllocateUninitializedArray<byte>(key.Length);
+
+        key.CopyTo(_encryptionKey);
+    }
 
     /// <summary>
     /// Represents the file extension used for encrypted files.
@@ -108,7 +114,7 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
     }
     
     /// <summary>
-    /// Loads application settings from the settings file, optionally decrypting the file if an encryptor is configured.
+    /// Loads application settings from the settings file, optionally decrypting the file if an encryption key is configured.
     /// </summary>
     /// <exception cref="FileNotFoundException">Thrown if the settings file or encrypted settings file does not exist at the expected location.</exception>
     /// <exception cref="Exception">Thrown if the settings file cannot be deserialized, or if the file's title does not match the application's expected title.</exception>
@@ -117,7 +123,7 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
         // try to load the data
         string data;
         const string errorMessage = "Settings file not found.";
-        if (Encryptor == null)
+        if (_encryptionKey == null)
         {
             if (!File.Exists(GetFilePath()))
                 throw new FileNotFoundException(errorMessage, GetFilePath());
@@ -127,7 +133,8 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
         {
             if (!File.Exists(GetFilePathEncrypted()))
                 throw new FileNotFoundException(errorMessage, GetFilePathEncrypted());
-            data = Encryptor.Decrypt(File.ReadAllText(GetFilePathEncrypted()));
+            using var crypto = new Crypto(_encryptionKey, true);
+            data = crypto.Decrypt(File.ReadAllText(GetFilePathEncrypted()));
         }
         var newSettings = _flavor.Deserialize<T1>(data) ?? throw new Exception("Failed to deserialize settings.");
         if (LocalMeta.Title != newSettings.Meta.Title)
@@ -142,7 +149,7 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
     public void Load(T1 settings)
     {
         Meta.Title = LocalMeta.Title;
-        Meta.Version = LocalMeta.Title;
+        Meta.Version = LocalMeta.Version;
         Settings = settings;
     }
 
@@ -154,10 +161,11 @@ public class AppSettingsManager<T1, T2> where T1 : new() where T2 : IAppSettings
         // prepare the data
         var data = _flavor.Serialize(_appSettingsModel);
         // save the data
-        if (Encryptor == null) File.WriteAllText(GetFilePath(), data);
+        if (_encryptionKey == null) File.WriteAllText(GetFilePath(), data);
         else
         {
-            var encryptedString = Encryptor.Encrypt(data);
+            using var crypto = new Crypto(_encryptionKey, false);
+            var encryptedString = crypto.Encrypt(data);
             File.WriteAllText(GetFilePathEncrypted(), encryptedString);
         }
     }
